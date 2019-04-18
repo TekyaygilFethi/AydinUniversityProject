@@ -1,0 +1,81 @@
+﻿@{
+    if (Session["Student"] == null)
+    {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+            <ul id="login-dp" class="dropdown-menu" style="width:220px">
+                <li>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Ajax.BeginForm("", "api/AccountApi/Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "LoginSuccess(res);", OnFailure = "LoginFailure(xhr, status, error);" }, new { htmlAttributes = new { @class = "form" }, id = "login-nav" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    <label class="sr-only" for="exampleInputEmail2">Username</label>
+                                    <input type="text" class="form-control" id="Username" name="Username" placeholder="Username or E-mail" style="width:200px; margin:0px 0px 0px 10px;" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="exampleInputPassword2">Password</label>
+                                    <input type="password" class="form-control" id="Password" name="Password" placeholder="Password" style="width:200px; margin:0px 0px 0px 10px" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="btnLogin" class="btn btn-primary btn-block" style="width:200px; margin:0px 0px 0px 10px">Login</button>
+                                </div>
+                                <div class="form-group">
+                                    <a href="@Url.Action("CreateAccount","User")" style="font-size:12px; margin:0px auto 0px 42px">Does not have account?</a>
+                                </div>
+                                <script type="text/javascript">@ViewBag.Script</script>
+
+                            }
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        var student = (AydinUniversityProject.Data.POCOs.Student)HttpContext.Current.Session["Student"];
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome @student.NameSurname</b> <span class="caret"></span></a>
+            <ul id="login-dp" class="dropdown-menu" style="width:100px">
+                <li>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("UserProfile", "User", FormMethod.Post, new { htmlAttributes = new { @class = "form" } }))
+                            {
+                                <div class="form-group">
+                                    <button id="btnProfile" class="btn btn-primary" style="width:130px; margin:0px 10px 0px 10px">Profile</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("Logout", "User", FormMethod.Post, new { htmlAttributes = new { @class = "form" } }))
+                            {
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-danger btn-block" style="width:130px; margin:0px 10px 0px 10px">Logout</button>@*Buraya log off controller yolu ekle!!!!*@
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    }
+}
+<script>
+    function LoginFailure(xhr, status, error) {
+        alert(xhr.responseJSON.Message);
+    }
+
+    function LoginSuccess(res) {
+        $.ajax({
+            type: "GET",
+            url: 'Home/Login',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(res),
+            dataType: "json",
+            success: function () { window.location.reload(); },
+            error: function (xhr, status, error) { alert(error); }
+        });
+    }
+
+</script>

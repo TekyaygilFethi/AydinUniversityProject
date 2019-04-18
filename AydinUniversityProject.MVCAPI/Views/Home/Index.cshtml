@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="jumbotron">
+    <h1>LiveCampus</h1>
+    <p class="lead">LiveCampus is a service that offers student to share their experience or lesson datas with each other and calculate their school success.</p>
+    @if (Session["Student"] == null)
+    {
+        <p><a href='@Url.Action("CreateAccount","User")' class="btn btn-primary btn-lg">Create Account Now! &raquo;</a></p>
+    }
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Forums</h2>
+        <p>
+            In LiveCampus forums, you can share your experience, knowledge and skills with other students or enlighten with theirs.
+        </p>
+        <p><a class="btn btn-default" href='@Url.Action("Index","Forum")'>LiveCampus Forums &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Screen Sharing</h2>
+        <p>Our screen share support works with our desktop application. For screen share tutorial please click button below.</p>
+        <p><a class="btn btn-default" href='@Url.Action("DesktopApplicationTutorialPage","Home")'>Tutorial &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Grade Calculation</h2>
+        <p>In LiveCampus you can add your university, faculty and department, lessons to department and grades to lessons. Only thing you have to do is create an account or login!</p>
+        <p><a class="btn btn-default" href="@Url.Action("GradeCompetition","Student")">Click to see our Grade Competition! &raquo;</a></p>
+    </div>
+</div>
