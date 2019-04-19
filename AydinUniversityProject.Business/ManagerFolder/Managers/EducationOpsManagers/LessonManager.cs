@@ -1,16 +1,16 @@
-﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ManagerBases;
-using AydinUniversityProject.Business.RepositoryFolder;
+﻿using AydinUniversityProject.Business.RepositoryFolder;
 using AydinUniversityProject.Data.POCOs;
+using System.Collections.Generic;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers
 {
-    public class LessonManager : BaseManager
+    public class LessonManager
     {
         IRepository<Lesson> lessonRepository;
 
-        public LessonManager()
+        public LessonManager(IRepository<Lesson> repo)
         {
-            lessonRepository = base.GetRepository<Lesson>();
+            lessonRepository = repo;
         }
 
         public void AddLesson(Lesson lesson)
@@ -26,6 +26,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
         public Lesson GetLesson(int ID)
         {
             return lessonRepository.GetByID(ID);
+        }
+
+        public List<Lesson> GetLessonsOfPeriod(int year, int term)
+        {
+            return lessonRepository.GetBy(w => w.Period.Semester == term && w.Period.Year == year);
         }
 
         public void DeleteLesson(Lesson lesson)

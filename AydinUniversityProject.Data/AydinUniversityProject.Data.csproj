@@ -49,15 +49,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\AccountComplexManagerData\CreateAccountFormData.cs" />
+    <Compile Include="Business\AccountComplexManagerData\LoginFormData.cs" />
     <Compile Include="Business\AccountComplexManagerData\LoginResponseObject.cs" />
-    <Compile Include="Business\EducationComplexManagerData\AddEducationFormData.cs" />
+    <Compile Include="Business\AccountComplexManagerData\LogOffFormData.cs" />
+    <Compile Include="Business\EducationComplexManagerData\AddLessonFormData.cs" />
+    <Compile Include="Business\EducationComplexManagerData\GetPeriodFormData.cs" />
+    <Compile Include="Business\EducationComplexManagerData\GetPeriodResponseObject.cs" />
     <Compile Include="Business\FriendRequestsComplexManagerData\AllFriendRequestsResponseObject.cs" />
     <Compile Include="Business\TransactionObject.cs" />
     <Compile Include="POCOs\Connection.cs" />
     <Compile Include="POCOs\Contact.cs" />
-    <Compile Include="POCOs\Conversation.cs" />
     <Compile Include="POCOs\Education.cs" />
     <Compile Include="POCOs\FavouriteFeeds.cs" />
+    <Compile Include="POCOs\FriendRelationship.cs" />
     <Compile Include="POCOs\FriendRequest.cs" />
     <Compile Include="POCOs\Lesson.cs" />
     <Compile Include="POCOs\Message.cs" />
@@ -65,7 +69,6 @@
     <Compile Include="POCOs\Period.cs" />
     <Compile Include="POCOs\Post.cs" />
     <Compile Include="POCOs\Review.cs" />
-    <Compile Include="POCOs\Score.cs" />
     <Compile Include="POCOs\ScreenShareRequest.cs" />
     <Compile Include="POCOs\SentFeeds.cs" />
     <Compile Include="POCOs\Student.cs" />

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AydinUniversityProject.Data.POCOs
 {
@@ -13,7 +9,8 @@ namespace AydinUniversityProject.Data.POCOs
     {
         public Period()
         {
-            Educations = new List<Education>();
+            Lessons = new List<Lesson>();
+            Students = new List<Student>();
         }
 
         [Key]
@@ -24,6 +21,8 @@ namespace AydinUniversityProject.Data.POCOs
 
         public int Semester { get; set; }
 
-        public virtual List<Education> Educations { get; set; }
-            }
+        public virtual List<Lesson> Lessons { get; set; }
+
+        public virtual List<Student> Students { get; set; }
+    }
 }

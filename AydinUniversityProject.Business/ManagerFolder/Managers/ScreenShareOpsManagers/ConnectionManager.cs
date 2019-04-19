@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ScreenShareOpsManagers
 {
-    public class ConnectionManager : BaseManager
+    public class ConnectionManager
     {
         IRepository<Connection> connectionRepository;
 
-        public ConnectionManager()
+        public ConnectionManager(IRepository<Connection> repo)
         {
-            connectionRepository = base.GetRepository<Connection>();
+            connectionRepository = repo;
         }
 
         public void AddConnection(Connection connection)

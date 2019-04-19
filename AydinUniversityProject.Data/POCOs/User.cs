@@ -12,14 +12,14 @@ namespace AydinUniversityProject.Data.POCOs
         {
             ConnectionsAsViewer = new List<Connection>();
             ConnectionsAsSharer = new List<Connection>();
-            Conversations = new List<Conversation>();
-            Friends = new List<User>();
             SignalRConnectionID = "";
             PendingStatus = "none";
             SentScreenShareRequests = new List<ScreenShareRequest>();
             ReceivedScreenShareRequests = new List<ScreenShareRequest>();
             SentFriendRequests = new List<FriendRequest>();
             ReceivedFriendRequests = new List<FriendRequest>();
+            SentMessages = new List<Message>();
+            ReceivedMessages = new List<Message>();
         }
 
         [Key]
@@ -44,8 +44,10 @@ namespace AydinUniversityProject.Data.POCOs
         public virtual List<Connection> ConnectionsAsViewer { get; set; }
 
         public virtual List<Connection> ConnectionsAsSharer { get; set; }
+        
+        public virtual List<Message> SentMessages { get; set; }
 
-        public virtual List<Conversation> Conversations { get; set; }
+        public virtual List<Message> ReceivedMessages { get; set; }
 
         [ForeignKey("SentFeedsID")]
         public virtual SentFeeds SentFeeds { get; set; }
@@ -55,7 +57,10 @@ namespace AydinUniversityProject.Data.POCOs
 
         public virtual Student Student { get; set; }
 
-        public virtual ICollection<User> Friends { get; set; }
+        [ForeignKey("FriendRelationshipID")]
+        public virtual FriendRelationship FriendRelationship { get; set; }
+
+        public virtual List<Review> Reviews { get; set; }
 
         public int? SentFeedsID { get; set; }
 
@@ -73,6 +78,8 @@ namespace AydinUniversityProject.Data.POCOs
 
         public DateTime CreationDate { get; set; }
 
+        public int FriendRelationshipID { get; set; }
+
         public virtual ICollection<ScreenShareRequest> SentScreenShareRequests { get; set; }
 
         public virtual ICollection<ScreenShareRequest> ReceivedScreenShareRequests { get; set; }
@@ -80,5 +87,16 @@ namespace AydinUniversityProject.Data.POCOs
         public virtual ICollection<FriendRequest> SentFriendRequests { get; set; }
 
         public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; }
+
+        [NotMapped]
+        public virtual ICollection<Connection> AllConnections { get
+            {
+                var conList = ConnectionsAsSharer;
+
+                conList.AddRange(ConnectionsAsViewer);
+
+                return conList;
+            }
+        }
     }
 }

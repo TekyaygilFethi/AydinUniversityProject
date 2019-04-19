@@ -1,17 +1,16 @@
-﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ManagerBases;
-using AydinUniversityProject.Business.RepositoryFolder;
+﻿using AydinUniversityProject.Business.RepositoryFolder;
 using AydinUniversityProject.Data.POCOs;
 using System.Linq;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers
 {
-    public class EducationManager : BaseManager
+    public class EducationManager
     {
         IRepository<Education> educationRepository;
 
-        public EducationManager()
+        public EducationManager(IRepository<Education> repo)
         {
-            educationRepository = base.GetRepository<Education>();
+            educationRepository = repo;
         }
 
         public void AddEducation(Education edu)
@@ -29,14 +28,19 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
             return educationRepository.GetByID(ID);
         }
 
+        public Education GetEducation(int StudentID,int LessonID)
+        {
+            return educationRepository.SingleGetBy(w=>w.StudentID==StudentID && w.LessonID==LessonID);
+        }
+
         public void DeleteEducation(Education edu)
         {
             educationRepository.Delete(edu);
         }
 
-        public bool IsEducationExists(int periodID,string lessonName)
+        public bool IsEducationExists(int studentID, int lessonID)
         {
-            return educationRepository.GetBy(w => w.PeriodID == periodID && w.Lesson.Name == lessonName).Any();
+            return educationRepository.GetBy(w => w.Lesson.ID == lessonID && w.StudentID==studentID).Any();
         }
     }
 }

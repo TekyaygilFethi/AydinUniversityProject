@@ -22,9 +22,9 @@ namespace AydinUniversityProject.Data.POCOs
         [Range(0,100, ErrorMessage = "The effect must be between 0 and 100")]
         public double EffectRate { get; set; }
 
-        [ForeignKey("ScoreID")]
-        public virtual Score Score { get; set; }
+        [ForeignKey("EducationID")]
+        public virtual Education Education { get; set; }
 
-        public int ScoreID { get; set; }
+        public int EducationID { get; set; }
     }
 }

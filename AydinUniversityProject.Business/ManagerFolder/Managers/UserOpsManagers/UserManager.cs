@@ -3,16 +3,17 @@ using AydinUniversityProject.Business.RepositoryFolder;
 using AydinUniversityProject.Data.Business;
 using AydinUniversityProject.Data.POCOs;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers
 {
-    public class UserManager : BaseManager
+    public class UserManager
     {
         IRepository<User> userRepository;
 
-        public UserManager()
+        public UserManager(IRepository<User> repo)
         {
-            userRepository = base.GetRepository<User>();
+            userRepository = repo;
         }
 
         public void AddUser(User user)
@@ -51,7 +52,12 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers
 
         public User GetUserByUsername(string username)
         {
-            return userRepository.SingleGetBy(w => w.Username == username);
+            return userRepository.SingleGetBy(w=>w.Username==username);
+        }
+
+        public int GetUserIDByUsername(string username)
+        {
+            return userRepository.SingleGetBy(w => w.Username == username).ID;
         }
 
         public bool IsUserExists(string username)
@@ -62,6 +68,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers
         public List<User> GetAllUsers()
         {
             return userRepository.GetAll();
+        }
+
+        public List<string> GetAllUsernames()
+        {
+            return userRepository.GetAll().Select(s => s.Username).ToList();
         }
     }
 }

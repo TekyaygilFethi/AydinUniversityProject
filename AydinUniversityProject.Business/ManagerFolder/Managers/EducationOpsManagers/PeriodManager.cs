@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers
 {
-    public class PeriodManager:BaseManager
+    public class PeriodManager
     {
         IRepository<Period> periodRepository;
 
-        public PeriodManager()
+        public PeriodManager(IRepository<Period> repo)
         {
-            periodRepository = base.GetRepository<Period>();
+            periodRepository = repo;
         }
 
         public void Deleteperiod(Period period)
@@ -41,6 +41,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
         public Period GetPeriod(int year,int semester)
         {
             return periodRepository.SingleGetBy(w => w.Year == year && w.Semester == semester);
+        }
+
+        public List<Period> GetAllPeriods()
+        {
+            return periodRepository.GetAll();
         }
 
     }

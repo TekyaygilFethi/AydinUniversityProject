@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManagers
 {
-    public class TopicManager : BaseManager
+    public class TopicManager
     {
         readonly IRepository<Topic> topicRepository;
 
-        public TopicManager()
+        public TopicManager(IRepository<Topic> repo)
         {
-            topicRepository = base.GetRepository<Topic>();
+            topicRepository = repo;
         }
 
         public Topic GetTopic(int ID)

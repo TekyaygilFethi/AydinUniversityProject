@@ -13,7 +13,7 @@ namespace AydinUniversityProject.Data.POCOs
     {
         public Education()
         {
-            Scores = new List<Score>();
+            Notes = new List<Note>();
         }
 
         [Key]
@@ -22,19 +22,16 @@ namespace AydinUniversityProject.Data.POCOs
         
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
-
-        [ForeignKey("PeriodID")]
-        public virtual Period Period { get; set; }
-
+                
         [ForeignKey("LessonID")]
         public virtual Lesson Lesson { get; set; }
 
-        public virtual List<Score> Scores { get; set; }
+        public virtual List<Note> Notes { get; set; }
         
         public int StudentID { get; set; }
 
         public int LessonID { get; set; }
 
-        public int PeriodID { get; set; }
+        public double Average { get; set; }
     }
 }

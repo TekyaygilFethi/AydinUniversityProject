@@ -1,5 +1,8 @@
 ﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ComplexManagersBases;
+using AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers;
+using AydinUniversityProject.Business.ManagerFolder.Managers.FriendOpsManagers;
 using AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers;
+using AydinUniversityProject.Business.UnitOfWorkFolder;
 using AydinUniversityProject.Data.Business;
 using AydinUniversityProject.Data.Business.AccountComplexManagerData;
 using AydinUniversityProject.Data.POCOs;
@@ -12,10 +15,17 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
     {
         UserManager userManager;
         StudentManager stdManager;
+        PeriodManager prdManager;
+        FriendRelationshipManager frManager;
+        IUnitOfWork uow;
+        
         public AccountComplexManager()
         {
-            userManager = base.GetManager<UserManager>();
-            stdManager = base.GetManager<StudentManager>();
+            uow = new UnitOfWork(new Database.Context.AydinUniversityProjectContext());
+            userManager = uow.GetManager<UserManager,User>();
+            stdManager = uow.GetManager<StudentManager,Student>();
+            prdManager = uow.GetManager<PeriodManager, Period>();
+            frManager = uow.GetManager<FriendRelationshipManager, FriendRelationship>();
         }
 
         public TransactionObject CreateAccount(CreateAccountFormData newAccountInfo)
@@ -26,6 +36,8 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
             {
                 try
                 {
+                    Period period = prdManager.GetPeriod(newAccountInfo.Year,newAccountInfo.Term);
+                                                         
                     User newUser = new User();
                     Student newStudent = new Student();
 
@@ -34,10 +46,13 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
                     newUser.Password = SecurityFolder.Security.GetEncryptedPassword(newAccountInfo.Password);
                     newUser.ProfilePhoto = newAccountInfo.ProfilePhoto;
                     newUser.Email = newAccountInfo.Email;
-
+                    
                     newStudent.Name = newAccountInfo.Name;
                     newStudent.Surname = newAccountInfo.Surname;
                     newStudent.Birthday = new DateTime(1996, 1, 1);
+                    newStudent.Period = period;
+
+                    period.Students.Add(newStudent);
 
                     newUser.Student = newStudent;
                     newStudent.User = newUser;
@@ -45,7 +60,14 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
                     userManager.AddUser(newUser);
                     stdManager.AddStudent(newStudent);
 
-                    var saveResponse = Save();
+
+                    FriendRelationship fr = new FriendRelationship();
+                    newUser.FriendRelationship = fr;
+
+                    frManager.AddFriendRelationship(fr);
+
+
+                    var saveResponse = uow.Save();
 
                     if (saveResponse.IsSuccess)
                     {
@@ -71,9 +93,9 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
             return response;
         }
 
-        public LoginResponseObject Login(string username, string password)
+        public LoginResponseObject Login(LoginFormData lgn)
         {
-            TransactionObject loginResponse = userManager.CheckCreedientals(username, password);
+            TransactionObject loginResponse = userManager.CheckCreedientals(lgn.Username, lgn.Password);
             LoginResponseObject response = new LoginResponseObject
             {
                 TransactionObject = loginResponse
@@ -81,9 +103,9 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
 
             if (loginResponse.IsSuccess)
             {
-                User currentUser = userManager.GetUserByUsername(username);
+                User currentUser = userManager.GetUserByUsername(lgn.Username);
                 SetOnlineStatus(userManager.GetUser(currentUser.ID), true);
-                Save();
+                uow.Save();
                 response.Student = currentUser.Student;
             }
             return response;
@@ -92,7 +114,7 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
         public User SetOnlineStatus(User user, bool IsOnline)
         {
             user.IsOnline = IsOnline;
-            base.Save();
+            uow.Save();
             return user;
         }
 
@@ -103,7 +125,7 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
             try
             {
                 SetOnlineStatus(userManager.GetUser(ID), false);
-                Save();
+                uow.Save();
                 response.IsSuccess = true;
             }
             catch (Exception ex)
@@ -147,6 +169,16 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
         public Student GetStudent(int ID)
         {
             return stdManager.GetStudent(ID);
+        }
+
+        public List<string> GetAllUsernames()
+        {
+            return userManager.GetAllUsernames();
+        }
+
+        public int GetUserIDByUsername(string username)
+        {
+            return userManager.GetUserIDByUsername(username);
         }
     }
 }

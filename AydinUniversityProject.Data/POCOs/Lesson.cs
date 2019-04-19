@@ -19,11 +19,20 @@ namespace AydinUniversityProject.Data.POCOs
         public int ID { get; set; }
 
         public string Name { get; set; }
-        
+
         public virtual List<Education> Educations { get; set; }
 
         public virtual List<Connection> Connections { get; set; }
 
-        public virtual List<Topic> Topics { get; set; }        
+        public virtual List<Topic> Topics { get; set; }
+
+        [ForeignKey("PeriodID")]
+        public virtual Period Period { get; set; }
+
+        public int PeriodID { get; set; }
+
+        public double Credit { get; set; }
+
+        public double ECTSCredit { get; set; }
     }
 }

@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers
 {
-    public class NoteManager : BaseManager
+    public class NoteManager
     {
         IRepository<Note> noteRepository;
 
-        public NoteManager()
+        public NoteManager(IRepository<Note> repo)
         {
-            noteRepository = base.GetRepository<Note>();
+            noteRepository = repo;
         }
 
         public void DeleteNote(Note note)

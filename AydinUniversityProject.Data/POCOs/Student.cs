@@ -29,6 +29,11 @@ namespace AydinUniversityProject.Data.POCOs
         
         public virtual List<Education> Educations { get; set; }
 
+        [ForeignKey("PeriodID")]
+        public virtual Period Period { get; set; }
+
+        public int PeriodID { get; set; }
+
         [NotMapped]
         public string NameSurname
         {

@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2BD8909-227C-477A-BA4B-F7E7F9B1E983}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AydinUniversityProject.Admin</RootNamespace>
+    <AssemblyName>AydinUniversityProject.Admin</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.BonusSkins.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Images.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Map.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v18.2.DataModel, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v18.2.DataModel.EF6, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v18.2.ViewModel, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdminPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdminPanel.Designer.cs">
+      <DependentUpon>AdminPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AydinUniversityProjectContextDataModel\AydinUniversityProjectContextUnitOfWork.cs" />
+    <Compile Include="AydinUniversityProjectContextDataModel\IAydinUniversityProjectContextUnitOfWork.cs" />
+    <Compile Include="AydinUniversityProjectContextDataModel\UnitOfWorkSource.cs" />
+    <Compile Include="Common\CollectionViewModel.cs" />
+    <Compile Include="Common\EntitiesViewModel.cs" />
+    <Compile Include="Common\ReadOnlyCollectionViewModel.cs" />
+    <Compile Include="Common\SingleObjectViewModel.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AydinUniversityProjectContextViewModel.cs" />
+    <Compile Include="ViewModels\Connection\ConnectionCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Connection\ConnectionViewModel.cs" />
+    <Compile Include="ViewModels\Contact\ContactCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Contact\ContactViewModel.cs" />
+    <Compile Include="ViewModels\Education\EducationCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Education\EducationViewModel.cs" />
+    <Compile Include="ViewModels\FavouriteFeeds\FavouriteFeedsCollectionViewModel.cs" />
+    <Compile Include="ViewModels\FavouriteFeeds\FavouriteFeedsViewModel.cs" />
+    <Compile Include="ViewModels\FriendRelationship\FriendRelationshipCollectionViewModel.cs" />
+    <Compile Include="ViewModels\FriendRelationship\FriendRelationshipViewModel.cs" />
+    <Compile Include="ViewModels\FriendRequest\FriendRequestCollectionViewModel.cs" />
+    <Compile Include="ViewModels\FriendRequest\FriendRequestViewModel.cs" />
+    <Compile Include="ViewModels\Lesson\LessonCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Lesson\LessonViewModel.cs" />
+    <Compile Include="ViewModels\Message\MessageCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Message\MessageViewModel.cs" />
+    <Compile Include="ViewModels\Note\NoteCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Note\NoteViewModel.cs" />
+    <Compile Include="ViewModels\Period\PeriodCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Period\PeriodViewModel.cs" />
+    <Compile Include="ViewModels\Post\PostCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Post\PostViewModel.cs" />
+    <Compile Include="ViewModels\Review\ReviewCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Review\ReviewViewModel.cs" />
+    <Compile Include="ViewModels\ScreenShareRequest\ScreenShareRequestCollectionViewModel.cs" />
+    <Compile Include="ViewModels\ScreenShareRequest\ScreenShareRequestViewModel.cs" />
+    <Compile Include="ViewModels\SentFeeds\SentFeedsCollectionViewModel.cs" />
+    <Compile Include="ViewModels\SentFeeds\SentFeedsViewModel.cs" />
+    <Compile Include="ViewModels\Student\StudentCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Student\StudentViewModel.cs" />
+    <Compile Include="ViewModels\Topic\TopicCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Topic\TopicViewModel.cs" />
+    <Compile Include="ViewModels\User\UserCollectionViewModel.cs" />
+    <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <Compile Include="Views\AydinUniversityProjectContextView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AydinUniversityProjectContextView.designer.cs">
+      <DependentUpon>AydinUniversityProjectContextView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Connection\ConnectionCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Connection\ConnectionCollectionView.designer.cs">
+      <DependentUpon>ConnectionCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Connection\ConnectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Connection\ConnectionView.designer.cs">
+      <DependentUpon>ConnectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contact\ContactCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Contact\ContactCollectionView.designer.cs">
+      <DependentUpon>ContactCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contact\ContactView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Contact\ContactView.designer.cs">
+      <DependentUpon>ContactView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Education\EducationCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Education\EducationCollectionView.designer.cs">
+      <DependentUpon>EducationCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Education\EducationView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Education\EducationView.designer.cs">
+      <DependentUpon>EducationView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FavouriteFeeds\FavouriteFeedsCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FavouriteFeeds\FavouriteFeedsCollectionView.designer.cs">
+      <DependentUpon>FavouriteFeedsCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FavouriteFeeds\FavouriteFeedsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FavouriteFeeds\FavouriteFeedsView.designer.cs">
+      <DependentUpon>FavouriteFeedsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FriendRelationship\FriendRelationshipCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FriendRelationship\FriendRelationshipCollectionView.designer.cs">
+      <DependentUpon>FriendRelationshipCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FriendRelationship\FriendRelationshipView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FriendRelationship\FriendRelationshipView.designer.cs">
+      <DependentUpon>FriendRelationshipView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FriendRequest\FriendRequestCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FriendRequest\FriendRequestCollectionView.designer.cs">
+      <DependentUpon>FriendRequestCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FriendRequest\FriendRequestView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\FriendRequest\FriendRequestView.designer.cs">
+      <DependentUpon>FriendRequestView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Lesson\LessonCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Lesson\LessonCollectionView.designer.cs">
+      <DependentUpon>LessonCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Lesson\LessonView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Lesson\LessonView.designer.cs">
+      <DependentUpon>LessonView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Message\MessageCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Message\MessageCollectionView.designer.cs">
+      <DependentUpon>MessageCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Message\MessageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Message\MessageView.designer.cs">
+      <DependentUpon>MessageView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Note\NoteCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Note\NoteCollectionView.designer.cs">
+      <DependentUpon>NoteCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Note\NoteView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Note\NoteView.designer.cs">
+      <DependentUpon>NoteView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Period\PeriodCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Period\PeriodCollectionView.designer.cs">
+      <DependentUpon>PeriodCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Period\PeriodView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Period\PeriodView.designer.cs">
+      <DependentUpon>PeriodView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Post\PostCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Post\PostCollectionView.designer.cs">
+      <DependentUpon>PostCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Post\PostView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Post\PostView.designer.cs">
+      <DependentUpon>PostView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Review\ReviewCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Review\ReviewCollectionView.designer.cs">
+      <DependentUpon>ReviewCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Review\ReviewView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Review\ReviewView.designer.cs">
+      <DependentUpon>ReviewView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScreenShareRequest\ScreenShareRequestCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ScreenShareRequest\ScreenShareRequestCollectionView.designer.cs">
+      <DependentUpon>ScreenShareRequestCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScreenShareRequest\ScreenShareRequestView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ScreenShareRequest\ScreenShareRequestView.designer.cs">
+      <DependentUpon>ScreenShareRequestView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SentFeeds\SentFeedsCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\SentFeeds\SentFeedsCollectionView.designer.cs">
+      <DependentUpon>SentFeedsCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SentFeeds\SentFeedsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\SentFeeds\SentFeedsView.designer.cs">
+      <DependentUpon>SentFeedsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Student\StudentCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Student\StudentCollectionView.designer.cs">
+      <DependentUpon>StudentCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Student\StudentView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Student\StudentView.designer.cs">
+      <DependentUpon>StudentView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Topic\TopicCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Topic\TopicCollectionView.designer.cs">
+      <DependentUpon>TopicCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Topic\TopicView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Topic\TopicView.designer.cs">
+      <DependentUpon>TopicView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\User\UserCollectionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\User\UserCollectionView.designer.cs">
+      <DependentUpon>UserCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\User\UserView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\User\UserView.designer.cs">
+      <DependentUpon>UserView.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AydinUniversityProject.Database\AydinUniversityProject.Database.csproj">
+      <Project>{ae33cef0-1d54-4c7b-b3db-37bb0df3d4ce}</Project>
+      <Name>AydinUniversityProject.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AydinUniversityProject.Data\AydinUniversityProject.Data.csproj">
+      <Project>{59cdb858-43c6-456c-96a2-abffd6ec8940}</Project>
+      <Name>AydinUniversityProject.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -26,10 +26,10 @@ namespace AydinUniversityProject.Data.POCOs
 
         public int ReviewPoint { get; set; }
 
-        [ForeignKey("UserID")]
+        [ForeignKey("SenderID")]
         public virtual User Sender { get; set; }
 
-        public int UserID { get; set; }
+        public int SenderID { get; set; }
 
         [ForeignKey("ConnectionID")]
         public virtual Connection Connection { get; set; }

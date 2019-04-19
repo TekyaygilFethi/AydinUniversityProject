@@ -9,7 +9,7 @@ namespace AydinUniversityProject.Database.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(AydinUniversityProject.Database.Context.AydinUniversityProjectContext context)

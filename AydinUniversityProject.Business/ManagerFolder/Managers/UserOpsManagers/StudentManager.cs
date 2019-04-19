@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers
 {
-    public class StudentManager : BaseManager
+    public class StudentManager
     {
         IRepository<Student> studentRepository;
 
-        public StudentManager()
+        public StudentManager(IRepository<Student> repo)
         {
-            studentRepository = base.GetRepository<Student>(); ;
+            studentRepository = repo;
         }
 
         public void AddStudent(Student student)

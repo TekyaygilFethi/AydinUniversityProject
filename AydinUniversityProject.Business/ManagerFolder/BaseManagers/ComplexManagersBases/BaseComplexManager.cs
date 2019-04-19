@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AydinUniversityProject.Business.ExceptionFolder;
+﻿using AydinUniversityProject.Business.ExceptionFolder;
+using AydinUniversityProject.Business.UnitOfWorkFolder;
 using AydinUniversityProject.Data.Business;
+using System;
 
 namespace AydinUniversityProject.Business.ManagerFolder.BaseManagers.ComplexManagersBases
 {
-    public class BaseComplexManager :MotherBases.MotherBaseManager,IBaseComplexManager
+    public class BaseComplexManager : IBaseComplexManager
     {
-        public T GetManager<T>() where T : class
-        {
-            return base.Context.GetManager<T>();
-        }
 
-        public TransactionObject Save()
-        {
-            return base.Context.Save();
-        }
+        //public T GetManager<T>(UnitOfWork uow) where T : class where TType : class
+        //{
+        //    return uow.GetManager<T>(uow.GetRepository<TType>());
+        //}
+
+        //public TransactionObject Save()
+        //{
+        //    return base.Context.Save();
+        //}
 
         public string GetExceptionMessage(Exception ex)
         {

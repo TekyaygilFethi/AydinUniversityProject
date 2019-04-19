@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ContactOpsManagers
 {
-    public class ContactManager : BaseManager
+    public class ContactManager
     {
         IRepository<Contact> contactRepository;
 
-        public ContactManager()
+        public ContactManager(IRepository<Contact> repo)
         {
-            contactRepository = base.GetRepository<Contact>();
+            contactRepository = repo;
         }
 
         public void AddContact(Contact contact)

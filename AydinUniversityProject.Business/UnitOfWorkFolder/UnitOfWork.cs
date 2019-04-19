@@ -7,7 +7,7 @@ using System.Data.Entity.Validation;
 
 namespace AydinUniversityProject.Business.UnitOfWorkFolder
 {
-    public class UnitOfWork : UnitOfWorkBase, IUnitOfWork
+    public class UnitOfWork : /*UnitOfWorkBase*/ IUnitOfWork
     {
         public AydinUniversityProjectContext db;
 
@@ -21,12 +21,12 @@ namespace AydinUniversityProject.Business.UnitOfWorkFolder
             return new Repository<T>(db);
         }
 
-        public T GetManager<T>() where T : class
+        public ManagerType GetManager<ManagerType,RepositoryType>() where ManagerType : class where RepositoryType:class
         {
-            Type type = typeof(T);
+            Type type = typeof(ManagerType);
             try
             {
-                return (T)Activator.CreateInstance(typeof(T));
+                return (ManagerType)Activator.CreateInstance(typeof(ManagerType),GetRepository<RepositoryType>());
             }
             catch
             {
@@ -48,6 +48,11 @@ namespace AydinUniversityProject.Business.UnitOfWorkFolder
                 response.Explanation = ExceptionOps.GetEntityValidationMessage(ex);
             }
             return response;
+        }
+
+        public void Dispose()
+        {
+            db.Dispose();
         }
     }
 }

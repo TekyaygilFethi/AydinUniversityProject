@@ -4,16 +4,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.BaseManagers.MotherBases
 {
     public class MotherBaseManager
     {
-        private static UnitOfWork uow = new UnitOfWork();
+        private static IUnitOfWork uow;
 
-        public UnitOfWork Context
+        public MotherBaseManager(IUnitOfWork uow)
         {
-            get
-            {
-                return uow;
-            }
 
         }
-
     }
 }

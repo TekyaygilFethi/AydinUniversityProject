@@ -1,63 +1,96 @@
 ﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ComplexManagersBases;
 using AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers;
 using AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers;
+using AydinUniversityProject.Business.UnitOfWorkFolder;
 using AydinUniversityProject.Data.Business;
 using AydinUniversityProject.Data.Business.EducationComplexManagerData;
 using AydinUniversityProject.Data.POCOs;
 using System;
+using System.Collections.Generic;
 
 namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentOpsComplexManagers
 {
     public class EducationOpsComplexManager : BaseComplexManager
     {
         EducationManager educationManager;
-        ScoreManager scoreManager;
         NoteManager noteManager;
         PeriodManager periodManager;
         LessonManager lessonManager;
         StudentManager studentManager;
 
+        IUnitOfWork uow;
+
         public EducationOpsComplexManager()
         {
-            educationManager = base.GetManager<EducationManager>();
-            scoreManager = base.GetManager<ScoreManager>();
-            noteManager = base.GetManager<NoteManager>();
-            periodManager = base.GetManager<PeriodManager>();
+            uow = new UnitOfWork(new Database.Context.AydinUniversityProjectContext());
+
+            educationManager = uow.GetManager<EducationManager, Education>();
+            noteManager = uow.GetManager<NoteManager, Note>();
+            periodManager = uow.GetManager<PeriodManager, Period>();
+            lessonManager = uow.GetManager<LessonManager, Lesson>();
+            studentManager = uow.GetManager<StudentManager, Student>();
         }
 
-        public TransactionObject AddEducation(AddEducationFormData auFormData)
+        public TransactionObject AddLesson(AddLessonFormData alFormData)
         {
             TransactionObject response = new TransactionObject();
 
             try
             {
-                Period currentPeriod = periodManager.GetPeriod(auFormData.Year, auFormData.Semester);
-                Student selectedStudent = studentManager.GetStudent(auFormData.StudentID);
+                Education education = educationManager.GetEducation(alFormData.StudentID, alFormData.LessonID);
 
-                if (!(educationManager.IsEducationExists(currentPeriod.ID, auFormData.LessonName)))
+                Student selectedStudent = studentManager.GetStudent(alFormData.StudentID);
+                Lesson selectedLesson = lessonManager.GetLesson(alFormData.LessonID);
+
+                if (education != null)
                 {
-                    Lesson newLesson = new Lesson
+                    Period currentPeriod = periodManager.GetPeriod(alFormData.Year, alFormData.Term);
+
+
+                    Note note = new Note
                     {
-                        Name = auFormData.LessonName
+                        ResultPoint = alFormData.Result,
+                        Description = alFormData.Description,
+                        EffectRate = alFormData.Effect,
+                        Education = education
                     };
 
-                    Education newEducation = new Education
-                    {
-                        Lesson = newLesson,
-                        Period = currentPeriod,
-                        Student = selectedStudent
-                    };
+                    note.Education = education;
+                    education.Notes.Add(note);
 
-                    currentPeriod.Educations.Add(newEducation);
-                    newLesson.Educations.Add(newEducation);
-                    selectedStudent.Educations.Add(newEducation);
 
-                    Save();
+                    noteManager.AddNote(note);
+
+                    uow.Save();
+                    response.IsSuccess = true;
                 }
                 else
                 {
-                    response.IsSuccess = false;
-                    response.Explanation = "You can't add the same \"Lesson\" name to same \"Period\" ";
+                    education = new Education();
+                    education.Student = selectedStudent;
+                    selectedStudent.Educations.Add(education);
+
+                    education.Lesson = selectedLesson;
+                    selectedLesson.Educations.Add(education);
+
+
+                    Note note = new Note
+                    {
+                        ResultPoint = alFormData.Result,
+                        Description = alFormData.Description,
+                        EffectRate = alFormData.Effect,
+                        Education = education
+                    };
+
+                    education.Notes.Add(note);
+
+                    note.Education = education;
+
+                    noteManager.AddNote(note);
+                    educationManager.AddEducation(education);
+
+                    uow.Save();
+                    response.IsSuccess = true;
                 }
             }
             catch (Exception ex)
@@ -76,7 +109,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
             try
             {
                 lessonManager.EditLesson(lessonManager.GetLesson(lessonID));
-                Save();
+                uow.Save();
                 response.IsSuccess = true;
             }
             catch (Exception ex)
@@ -95,7 +128,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
             try
             {
                 lessonManager.DeleteLesson(lessonManager.GetLesson(lessonID));
-                Save();
+                uow.Save();
                 response.IsSuccess = true;
             }
             catch (Exception ex)
@@ -104,6 +137,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
                 response.Explanation = base.GetExceptionMessage(ex);
             }
             return response;
+        }
+
+        public List<Lesson> GetLesson(int year, int term)
+        {
+            return lessonManager.GetLessonsOfPeriod(year, term);
         }
         #endregion
 
@@ -115,8 +153,8 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
             try
             {
                 noteManager.EditNote(noteManager.GetNote(noteID));
-                
-                Save();
+
+                uow.Save();
                 response.IsSuccess = true;
             }
             catch (Exception ex)
@@ -135,7 +173,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
             {
                 noteManager.DeleteNote(noteManager.GetNote(noteID));
 
-                Save();
+                uow.Save();
                 response.IsSuccess = true;
             }
             catch (Exception ex)
@@ -147,6 +185,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
         }
         #endregion
 
-
+        #region Period Ops
+        public Period GetPeriod(int year, int semester)
+        {
+            return periodManager.GetPeriod(year, semester);
+        }
+        #endregion
     }
 }

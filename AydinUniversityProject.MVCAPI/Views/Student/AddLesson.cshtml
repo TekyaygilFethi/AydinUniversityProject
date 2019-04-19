@@ -1,0 +1,167 @@
+﻿
+@using (Ajax.BeginForm("", "api/Education/AddLesson", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AddSuccess", OnFailure = "AddFailed(xhr,status,error)" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="form-group">
+                <span class="label label-primary">UNIVERSITY</span>
+                <div class="col-md-12">
+                    <br />
+                    ISTANBUL AYDIN UNIVERSITY
+                </div>
+            </div>
+            <br />
+            <hr />
+            <div class="form-group">
+                <span class="label label-success">FACULTY</span>
+                <div class="col-md-12">
+                    <br />
+                    ENGINEERING FACULTY
+                </div>
+            </div>
+            <br />
+            <hr />
+            <div class="form-group">
+                <span class="label label-danger">DEPARTMENT</span>
+                <div class="col-md-12">
+                    <br />
+                    COMPUTER PROGRAMMING
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <span class="label label-default">YEAR</span>
+                    <br />
+                    <br />
+                    <select id="Year" name="Year">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <span class="label label-default">TERM</span>
+                    <br />
+                    <br />
+                    <select id="Term" name="Term">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <span class="label label-default">Lesson</span>
+                    <br />
+                    <br />
+                    <select id="LessonName" name="LessonName" required></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input type="hidden" id="StudentID" name="StudentID" value="@TempData["StudentID"]" />
+                </div>
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label>Description</label>
+                <input type="number" name="Description" id="Description" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label>RESULT POINT</label>
+            <input type="number" name="Result" id="Result" required />
+        </div>
+        <div class="form-group">
+            <label>Effect (%)</label>
+            <input type="number" max="100" min="0" id="Effect" name="Effect" required />
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+@Html.ActionLink("Back to List", "ListLessons", "Student")
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+
+            $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("","api/Education/GetLessons")',
+                    dataType: 'json',
+                    data: { Year: 1,Term:1 },
+                    success: function (lessons) {
+                        $.each(lessons, function (i, lesson) {
+                            $("#LessonName").append('<option value="' + lesson.ID + '">' +
+                                lesson.Name + '</option>');
+                        })
+                    }, error: function (ex) {
+                        alert('Failed to retrieve lessons! ' + ex)
+                    }
+                });
+
+
+
+
+
+            $('#Year').change(function () {
+                $('#LessonName').empty();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("","api/Education/GetLessons")',
+                    dataType: 'json',
+                    data: { Year: $("#Year").val(),Term:$('#Term').val() },
+                    success: function (lessons) {
+                        $.each(lessons, function (i, lesson) {
+                            $("#LessonName").append('<option value="' + lesson.ID + '">' +
+                                lesson.Name + '</option>');
+                        })
+                    }, error: function (ex) {
+                        alert('Failed to retrieve lessons! ' + ex)
+                    }
+                });
+                return false;
+            });
+
+            $('#Term').change(function () {
+                $('#LessonName').empty();
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("","api/Education/GetLessons")',
+                    dataType: 'json',
+                    data: { Year: $("#Year").val(), Term: $('#Term').val() },
+                    success: function (lessons) {
+                        $.each(lessons, function (i, lesson) {
+                            $("#LessonName").append('<option value="' + lesson.ID + '">' +
+                                                     lesson.Name + '</option>');
+                        })
+                    }, error: function (ex) {
+                        alert('Failed to retrieve faculties! ' + ex)
+                    }
+                });
+                return false;
+            });
+        });
+
+
+
+        function AddSuccess()
+        {
+            alert("Lesson creation successful!");
+
+            window.location.href = '@Url.Action("ListLessons","Student")';
+        }
+        function AccountCreationFailure(xhr, status, error) {
+            alert(xhr.responseJSON.Message);
+        }
+    </script>
+}

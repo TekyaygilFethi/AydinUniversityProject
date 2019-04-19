@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.FriendOpsManagers
 {
-    public class MessageManager : BaseManager
+    public class MessageManager 
     {
         IRepository<Message> messageRepository;
 
-        public MessageManager()
+        public MessageManager(IRepository<Message> repo)
         {
-            messageRepository = base.GetRepository<Message>();
+            messageRepository = repo;
         }
 
         public void AddMessage(Message msg)

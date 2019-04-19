@@ -1,4 +1,5 @@
-﻿using AydinUniversityProject.Data.Business;
+﻿using AydinUniversityProject.Business.RepositoryFolder;
+using AydinUniversityProject.Data.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace AydinUniversityProject.Business.UnitOfWorkFolder
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork:IDisposable
     {
-        //T GetManager<T>() where T : class;
+        ManagerType GetManager<ManagerType,RepositoryType>() where ManagerType : class where RepositoryType:class;
         TransactionObject Save();
+        IRepository<T> GetRepository<T>() where T : class;
     }
 }

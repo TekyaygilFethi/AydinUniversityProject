@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManagers
 {
-    public class PostManager : BaseManager
+    public class PostManager
     {
         readonly IRepository<Post> postRepository;
 
-        public PostManager()
+        public PostManager(IRepository<Post> repo)
         {
-            postRepository = base.GetRepository<Post>();
+            postRepository = repo;
         }
 
         public Post GetPost(int ID)

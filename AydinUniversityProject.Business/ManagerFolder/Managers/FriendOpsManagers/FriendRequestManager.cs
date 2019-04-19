@@ -8,13 +8,13 @@ using System.Linq;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.FriendOpsManagers
 {
-    public class FriendRequestManager : BaseManager
+    public class FriendRequestManager
     {
         readonly IRepository<FriendRequest> friendRequestRepository;
 
-        public FriendRequestManager()
+        public FriendRequestManager(IRepository<FriendRequest> repo)
         {
-            friendRequestRepository = base.GetRepository<FriendRequest>();
+            friendRequestRepository = repo;
         }
 
         public FriendRequest GetFriendRequest(int ID)

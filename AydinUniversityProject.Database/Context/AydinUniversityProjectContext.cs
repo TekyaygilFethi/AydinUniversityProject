@@ -1,23 +1,22 @@
 ﻿using AydinUniversityProject.Data.POCOs;
+using System;
 using System.Data.Entity;
 
 namespace AydinUniversityProject.Database.Context
 {
-    public class AydinUniversityProjectContext : DbContext
+    public class AydinUniversityProjectContext : DbContext, IDisposable
     {
-        public AydinUniversityProjectContext() : base("AydinUniversityProjectContext") { }
+        public AydinUniversityProjectContext() : base("AydinUniversityProjectDb") { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Education> Educations { get; set; }
-        public DbSet<Score> Scores { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<SentFeeds> SentFeeds { get; set; }
@@ -25,6 +24,7 @@ namespace AydinUniversityProject.Database.Context
         public DbSet<ScreenShareRequest> ScreenShareRequests { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<FriendRelationship> FriendRelationships { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -43,12 +43,7 @@ namespace AydinUniversityProject.Database.Context
                 .HasRequired(r => r.Student)
                 .WithRequiredPrincipal(r => r.User)
                 .WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<User>()
-                .HasMany(m => m.Conversations)
-                .WithMany(r => r.Participants)
-                .Map(map => map.MapLeftKey("UserID").MapRightKey("ConversationID").ToTable("UserConversationTable"));
-
+                            
             modelBuilder.Entity<User>()
                 .HasMany(m => m.SentFriendRequests)
                 .WithRequired(r => r.Requester)
@@ -62,9 +57,21 @@ namespace AydinUniversityProject.Database.Context
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Friends)
-                .WithMany()
-                .Map(m => m.ToTable("UserFriendTable"));
+                .HasRequired(u => u.FriendRelationship)
+                .WithMany(m => m.Friends)
+                .HasForeignKey(fk => fk.FriendRelationshipID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Reviews)
+                .WithRequired(m => m.Sender)
+                .HasForeignKey(fk => fk.SenderID)
+                .WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.Friends)
+            //    .WithMany()
+            //    .Map(m => m.ToTable("UserFriendTable"));
 
             modelBuilder.Entity<User>()
                 .HasMany(m => m.SentScreenShareRequests)
@@ -78,6 +85,18 @@ namespace AydinUniversityProject.Database.Context
                 .HasForeignKey(fk => fk.RequestToID)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<User>()
+                .HasMany(m => m.SentMessages)
+                .WithRequired(r => r.SenderUser)
+                .HasForeignKey(fk => fk.SenderUserID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(m => m.ReceivedMessages)
+                .WithRequired(r => r.ReceiverUser)
+                .HasForeignKey(fk => fk.ReceiverUserID)
+                .WillCascadeOnDelete(false);
+
             #endregion
 
             #region Student FLUENT API
@@ -87,6 +106,12 @@ namespace AydinUniversityProject.Database.Context
                 .HasForeignKey(fk => fk.StudentID)
                 .WillCascadeOnDelete(true);
 
+            modelBuilder.Entity<Student>()
+                .HasRequired(r => r.Period)
+                .WithMany(m => m.Students)
+                .HasForeignKey(fk => fk.PeriodID)
+                .WillCascadeOnDelete(false);
+
             #endregion
 
             #region Education FLUENT API
@@ -95,6 +120,16 @@ namespace AydinUniversityProject.Database.Context
                 .WithMany(mm => mm.Educations)
                 .HasForeignKey(fk => fk.LessonID)
                 .WillCascadeOnDelete(false);
+
+
+            #endregion
+
+            #region Lesson FLUENT API
+            modelBuilder.Entity<Lesson>()
+                .HasRequired(r => r.Period)
+                .WithMany(m => m.Lessons)
+                .HasForeignKey(fk => fk.PeriodID)
+                .WillCascadeOnDelete(true);
             #endregion
 
             #region Topic FLUENT API
@@ -124,26 +159,11 @@ namespace AydinUniversityProject.Database.Context
 
             #endregion
 
-            #region Score FLUENT API
-            modelBuilder.Entity<Score>()
+            #region Note FLUENT API
+            modelBuilder.Entity<Note>()
                 .HasRequired(r => r.Education)
-                .WithMany(m => m.Scores)
+                .WithMany(m => m.Notes)
                 .HasForeignKey(fk => fk.EducationID)
-                .WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<Score>()
-                .HasMany(m => m.Notes)
-                .WithRequired(r => r.Score)
-                .HasForeignKey(fk => fk.ScoreID)
-                .WillCascadeOnDelete(true);
-
-            #endregion
-
-            #region Conversation FLUENT API
-            modelBuilder.Entity<Conversation>()
-                .HasMany(m => m.Messages)
-                .WithRequired(r => r.Conversation)
-                .HasForeignKey(fk => fk.ConversationID)
                 .WillCascadeOnDelete(true);
             #endregion
 

@@ -16,12 +16,20 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             return View(new CreateAccountFormData());
         }
 
-        public ActionResult Login(Student responseStudent)
+        [HttpPost]
+        public JsonResult Login(Student response)
         {
-            Session["Student"] = responseStudent;
+            Session["Student"] = (Student)response;
             
-            return RedirectToAction("Index");
+            return Json(new { IsSuccess=true});
         }
 
+        [HttpPost]
+        public JsonResult Logoff()
+        {
+            Session.Abandon();
+            Session.Clear();
+            return Json(new { IsSuccess = true });
+        }
     }
 }

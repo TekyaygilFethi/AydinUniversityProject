@@ -6,7 +6,6 @@
     <title>@ViewBag.Title - LiveCampus</title>
     <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
         @Styles.Render("~/Content/css")
-    @*@Scripts.Render("~/bundles/modernizr")*@
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -81,8 +80,8 @@
         var usernames;
 
         $.when($.ajax({
-            method: "POST",
-            url: '@Url.Action("GetAllUsernames","User")',
+            method: "GET",
+            url: '@Url.Action("","api/Account/GetAllUsernames")',
             success: function (usernameList) {
                 usernames = usernameList;
             }
@@ -101,8 +100,8 @@
             var username = $('#autocomplete1').val();
             var userID;
             $.ajax({
-                method: "POST",
-                url: '@Url.Action("GetIDByUsername","User")',
+                method: "GET",
+                url: '@Url.Action("", "api/Account/GetIDByUsername")',
                 data:{username:username},
                 success: function (ID) {
                     userID = ID;

@@ -1,0 +1,322 @@
+﻿@model AydinUniversityProject.Data.POCOs.Student
+@{
+    @*@ViewBag.Title = Model.User.Username + "'s Profile";*@
+    bool isFavFeedNull = Model.User.FavouriteFeeds == null;
+    bool isSentFeedNull = Model.User.SentFeeds == null;
+}
+<link href="~/Content/educationdetail-css.css" rel="stylesheet" />
+<br />
+<br />
+<div align="center"><font face="Georgia" color="red" style="font-size:25px">~USER PROFILE~</font></div><hr style="border-color:black; width:300px;margin-top:2px;margin-bottom:30px;" />
+<br />
+<div class="row">
+
+    <!--ANA AÇIKLAMA ALANI-->
+    <div class="col-xs-12">
+        <img src='@Model.User.ProfilePhoto' width="10%" height="auto" />
+        <div class="pull-right" style="padding-right:100px">
+            <font face="Georgia" style="font-size:30px;padding-left:2px;">@Model.User.Username</font>&ensp;
+            <br />
+            <font face="Georgia" style="font-size:20px;">@Model.NameSurname</font>
+            <br />
+            <br />
+            <font face="Georgia" style="font-size:20px;">@Model.Birthday.ToShortDateString()</font>
+        </div>
+    </div>
+    <div class="col-md-12">
+        @if ((bool)TempData["IsLocalUser"] == false && (bool)TempData["IsLogged"]==true)
+        {
+            if ((bool)TempData["IsSentRequest"] != false)
+            {
+                <div>Friend request has been sent! @Ajax.ActionLink("Undo request", "UnsendFriendRequest", new { userID = Model.ID }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to delete this request?", OnSuccess = "window.location.reload();" })</div>
+            }
+            else
+            {
+                if ((bool)TempData["IsFriend"] == true)
+                {
+                    @Ajax.ActionLink("Remove Friend", "DeleteFriend", new { userID = Model.ID }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();" })
+                }
+                else
+                {
+                    @Ajax.ActionLink("Send Friend Request", "SendFriendRequest", new { userID = Model.ID }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();" })
+                }
+
+            }
+        }
+    </div>
+    <!--ANA AÇIKLAMA ALANI-->
+    <div class="clearfix"></div>
+    <!--EKRAN PAYLAŞIM İSTATİSTİK ALANI-->
+    <div class="col-xs-12">
+        <hr style="border-color:red;" />
+
+        <div align="center"><font face="Georgia" color="red" style="font-size:25px">~SCREEN SHARE RECORDS~</font></div><hr style="width:370px;border-color:black;margin-top:2px;margin-bottom:30px;" />
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div align="center">PREVIOUS SCREEN SHARES</div>
+            </div>
+            <div class="panel-body">
+                @if (Model.User.AllConnections.Count > 0)
+                {
+                    foreach (var connection in Model.User.AllConnections)
+                    {
+                        <a href="@Url.Action("ConnectionDetails", "Connection", new { ID = connection.ID })" style="text-decoration:none;color:black;" onmouseover="this.getElementsById(styledHref)[0].style.color=blue;" id="styledHref">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <span class="glyphicon glyphicon-facetime-video"></span>&ensp; @connection.ConnectionName @*<div class="pull-right">@connection.ConnectionDate.ToShortDateString()</div>*@
+                                </div>
+                                <div class="panel-body">
+                                    with @connection.ViewerID!=@Model.ID ? @connection.Viewer?.Username : @connection.Sharer?.Username
+                                    @if (connection.ConnectionDuration.TotalMinutes < 1)
+                                    {
+                                        <div class="pull-right">
+                                            @Math.Ceiling(@connection.ConnectionDuration.TotalSeconds) seconds
+                                        </div>
+                                    }
+                                    @if (connection.ConnectionDuration.TotalMinutes >= 1)
+                                    {
+                                        <div class="pull-right">
+                                            @Math.Ceiling(@connection.ConnectionDuration.TotalMinutes) minutes
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                        <br />
+                    }
+                    <hr />
+
+                    <a href="@Url.Action("PreviousConnections", "Connection")"><span class="glyphicon glyphicon-arrow-right"></span>View more!</a>
+                }
+                else
+                {
+                    <div>THERE ARE NO CONNECTIONS YET!</div>
+                }
+            </div>
+        </div>
+    </div>
+    <!--EKRAN PAYLAŞIM İSTATİSTİK ALANI-->
+    <div class="clearfix"></div>
+    <hr style="border-color:red;" />
+    <!--EĞİTİM ALANI-->
+
+    <div class="col-xs-12">
+        <div align="center"><font face="Georgia" color="red" style="font-size:25px">~EDUCATION DETAILS~</font></div><hr style="width:300px;border-color:black;margin-top:2px;margin-bottom:30px;" />
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div align="center">EDUCATIONS</div>
+            </div>
+            <div class="panel-body">
+                @if (Model.Educations.Count > 0)
+                {
+                    foreach (var education in Model.Educations.GroupBy(gr => gr.Lesson.Period))
+                    {
+                        <div align="center">
+                            <br />
+                            Year: @education.Key.Year Term: @education.Key.Semester
+                            <hr style="width:200px;border-color:red" />
+                            <br />
+                        </div>
+
+                        <div class="pull-left">
+                            LESSON COUNT: @education.Key.Lessons.Count
+                        </div>
+                        <div class="pull-right">
+                            @*AVERAGE: @education.Key.Educations.Select(each => each.*@
+                        </div>
+                        <br />
+
+                    }
+                }
+                else
+                {
+                    <div>THERE ARE NO EDUCATIONS!</div>
+                }
+            </div>
+            <br />
+        </div>
+        <!--EĞİTİM ALANI-->
+        <div class="clearfix"></div>
+        <hr style="border-color:red;" />
+        <!--FORUM ALANI-->
+        <div class="col-xs-12">
+            <div align="center"><font face="Georgia" color="red" style="font-size:25px">~FORUM STATS~</font></div><hr style="width:220px;border-color:black;margin-top:2px;margin-bottom:30px;" />
+        </div>
+        <div class="col-xs-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <div align="center"> TOPICS</div>
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <div align="center">Sent</div>
+                            </div>
+                            <div class="panel-body">
+                                @if ((bool)TempData["IsSentFeedNull"] == false)
+                                {
+                                    foreach (var sentTopic in Model.User?.SentFeeds.SentTopics)
+                                    {
+                                        <div class="panel panel-default">
+                                            <a href='@Url.Action("TopicPosts", "Forum", new { ID = sentTopic.ID })' style="text-decoration:none;background-color:none">
+                                                <div class="panel-heading">
+                                                    <div class="panel-title">
+                                                        <div align="left">@sentTopic.FavouritedCount &ensp;<span class="glyphicon glyphicon-star"></span> &emsp;&emsp; <font style="color:red" face="Georgia">@sentTopic.Name</font></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <br />
+                                    }
+                                    <hr />
+                                    <div align="left">
+                                        <a href="@Url.Action("SentTopicList", "Forum")"><span class="glyphicon glyphicon-arrow-right"></span>View More!</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>THERE ARE NO SENT TOPICS TO SHOW!</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <br />
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <div align="center">Favourite</div>
+                            </div>
+                            <div class="panel-body">
+                                @if ((bool)TempData["IsFavFeedNull"] == false)
+                                {
+                                    foreach (var favTopic in Model.User?.FavouriteFeeds.FavouriteTopics)
+                                    {
+                                        <div class="panel panel-default">
+                                            <a href='@Url.Action("TopicPosts", "Forum", new { ID = favTopic.ID })' style="text-decoration:none;background-color:none">
+                                                <div class="panel-heading">
+                                                    <div class="panel-title">
+                                                        <div align="left">@favTopic.FavouritedCount &ensp;<span class="glyphicon glyphicon-star"></span> &emsp;&emsp; <font style="color:red" face="Georgia">@favTopic.Name</font></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <br />
+                                    }
+                                    <hr />
+                                    <div align="left">
+                                        <a href="@Url.Action("FavTopicList", "Forum")"><span class="glyphicon glyphicon-arrow-right"></span>View More!</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>THERE ARE NO FAVOURITE TOPIC TO SHOW!</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6" style="border-left: 2px solid red;">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <div align="center">POSTS</div>
+                </div>
+                <div class="panel-body">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <div align="center">Sent:</div>
+                        </div>
+                        <div class="panel-body">
+                            @if ((bool)TempData["IsSentFeedNull"] == false)
+                            {
+                                foreach (var sentPost in Model.User?.SentFeeds.SentPosts)
+                                {
+                                    <div class="panel panel-default">
+                                        <a href='@Url.Action("TopicPosts", "Forum", new { ID = sentPost.TopicID, anchoredPostID = sentPost.ID })' style="text-decoration:none;background-color:none">
+                                            <div class="panel-heading">
+                                                <div class="panel-title">
+                                                    <div align="left">@sentPost.FavouritedCount &ensp;<span class="glyphicon glyphicon-star"></span> &emsp;&emsp; <font style="color:red" face="Georgia">@sentPost.Topic.Name</font></div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-condensed">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><div align="right">@sentPost.Content</div></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <br />
+                                }
+                                <div align="left">
+                                    <a href="@Url.Action("SentPostList", "Forum")"><span class="glyphicon glyphicon-arrow-right"></span>View More!</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>THERE ARE NO SENT POSTS TO SHOW!</div>
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <div align="center">Favourites:</div>
+                        </div>
+                        <div class="panel-body">
+                            @if ((bool)TempData["IsFavFeedNull"] == false)
+                            {
+                                foreach (var favPost in Model.User?.FavouriteFeeds.FavouritePosts)
+                                {
+                                    <div class="panel panel-default">
+                                        <a href='@Url.Action("TopicPosts", "Forum", new { ID = favPost.TopicID, anchoredPostID = favPost.ID })' style="text-decoration:none;background-color:none">
+                                            <div class="panel-heading">
+                                                <div class="panel-title">
+                                                    <div align="left">@favPost.FavouritedCount &ensp;<span class="glyphicon glyphicon-star"></span> &emsp;&emsp; <font style="color:red" face="Georgia">@favPost.Topic.Name</font></div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-condensed">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><div align="right">@favPost.Content</div></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <br />
+                                }
+                                <hr />
+                                <div align="left">
+                                    <a href="@Url.Action("FavPostList", "Forum")"><span class="glyphicon glyphicon-arrow-right"></span>View More!</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>THERE ARE NO FAVOURITED POSTS TO SHOW!</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+
+        <!--FORUM ALANI-->
+    </div>
+</div>
+

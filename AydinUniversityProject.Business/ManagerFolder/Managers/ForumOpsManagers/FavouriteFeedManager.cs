@@ -4,13 +4,13 @@ using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManagers
 {
-    public class FavouriteFeedManager : BaseManager
+    public class FavouriteFeedManager 
     {
         IRepository<FavouriteFeeds> favFeedRepository;
 
-        public FavouriteFeedManager()
+        public FavouriteFeedManager(IRepository<FavouriteFeeds> repo)
         {
-            favFeedRepository = base.GetRepository<FavouriteFeeds>();
+            favFeedRepository = repo;
         }
 
         public void AddFavouriteFeed(FavouriteFeeds favFeed)

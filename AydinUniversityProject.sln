@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AydinUniversityProject.Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AydinUniversityProject.MVCAPI", "AydinUniversityProject.MVCAPI\AydinUniversityProject.MVCAPI.csproj", "{F4D4DBBA-E359-4030-9993-669CC22D84F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AydinUniversityProject.DummyInsertionConsole", "AydinUniversityProject.DummyInsertionConsole\AydinUniversityProject.DummyInsertionConsole.csproj", "{61DBC6EC-1095-4F45-A643-FA724FDFA257}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F4D4DBBA-E359-4030-9993-669CC22D84F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4D4DBBA-E359-4030-9993-669CC22D84F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4D4DBBA-E359-4030-9993-669CC22D84F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
