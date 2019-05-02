@@ -45,13 +45,7 @@ namespace AydinUniversityProject.Business.RepositoryFolder
         {
             return db.Set<T>().SingleOrDefault(predicate);
         }
-
-        public void Update(T item)
-        {
-            db.Set<T>().Attach(item);
-            db.Entry(item).State = EntityState.Modified;
-        }
-
+        
         public void Attach(T item)
         {
             db.Set<T>().Attach(item);

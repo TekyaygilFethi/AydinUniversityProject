@@ -176,12 +176,15 @@ namespace AydinUniversityProject.Database.Context
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Post>()
-                .HasOptional(r => r.FavouriteFeed)
+                .HasMany(r => r.FavouriteFeeds)
                 .WithMany(m => m.FavouritePosts)
-                .HasForeignKey(fk => fk.FavouriteFeedID)
-                .WillCascadeOnDelete(false);
+                .Map(map => map.MapLeftKey("PostID").MapRightKey("FavouriteFeedID").ToTable("PostFavouriteFeedsTable"));
 
-
+            modelBuilder.Entity<Post>()
+                .HasRequired(r => r.Lesson)
+                .WithMany(m => m.Posts)
+                .HasForeignKey(fk => fk.LessonID)
+                .WillCascadeOnDelete(true);
             #endregion
 
             #region Connection Fluent API

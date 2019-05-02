@@ -1,11 +1,19 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    @{
+        bool IsAdmin = false;
+        if (Session["User"] != null)
+        {
+            IsAdmin = ((AydinUniversityProject.Data.POCOs.User)Session["User"]).IsAdmin;
+        }
+    }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - LiveCampus</title>
     <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
-        @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css")
+    @RenderSection("Styles", false)
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -32,7 +40,7 @@
                         <li>@Ajax.ActionLink("Connect as Viewer", "ConnectAsViewer", "Connection", new AjaxOptions { HttpMethod = "POST", OnSuccess = "alert('Please open your winform application!');" })</li>
 
 
-                        if ((Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.IsAdmin)
+                        if (IsAdmin == true)
                         {
                             <li>@Html.ActionLink("Admin Page", "Index", "Admin")</li>
                         }

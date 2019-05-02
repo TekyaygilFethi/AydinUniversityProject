@@ -12,12 +12,29 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         // GET: User
         public async Task<ActionResult> UserProfile(int ID)
         {
+            string apiUrl = Url.Action("", "api/Account/GetStudent/", null, Request.Url.Scheme);
             Student student = null;
 
-            if (((Student)Session["Student"]) != null && ID == ((Student)Session["Student"]).ID)
+            if (Session["Student"] != null && ID == (int)Session["Student"])
             {
                 TempData["IsLocalUser"] = true;
-                student = ((Student)Session["Student"]);
+
+                apiUrl +=  + (int)Session["Student"];
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(apiUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var data = await response.Content.ReadAsStringAsync();
+                        student = Newtonsoft.Json.JsonConvert.DeserializeObject<Student>(data);
+                    }
+                }
+
+
                 TempData["IsFavFeedNull"] = student.User.FavouriteFeeds == null;
                 TempData["IsSentFeedNull"] = student.User.SentFeeds == null;
                 //kendi profili
@@ -26,32 +43,34 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             {
                 TempData["IsLocalUser"] = false;
 
-                if (((Student)Session["Student"]) != null)
+                apiUrl += "?ID=" + ID;
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(apiUrl);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var data = await response.Content.ReadAsStringAsync();
+                        student = Newtonsoft.Json.JsonConvert.DeserializeObject<Student>(data);
+                    }
+                }
+
+                if (Session["Student"] != null)
                 {
                     TempData["IsLogged"] = true;
-                    student = (Student)Session["Student"];
+                    
+                    
+                    
                     TempData["IsSentRequest"] = student.User.SentFriendRequests.Any(w => w.RequestToID == ID && w.IsAccepted == false);
                     TempData["IsFriend"] = student.User.FriendRelationship.Friends.Any(w => w.ID == ID);
                 }
                 else
                 {
                     TempData["IsLogged"] = false;
-
-                    string apiUrl = Url.Action("", "api/Account/GetStudent/" + ID, null, Request.Url.Scheme);
-
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri(apiUrl);
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                        HttpResponseMessage response = await client.GetAsync(apiUrl);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var data = await response.Content.ReadAsStringAsync();
-                            student = Newtonsoft.Json.JsonConvert.DeserializeObject<Student>(data);
-                        }
-                    }
+                    
                 }
 
                 TempData["IsFavFeedNull"] = student.User.FavouriteFeeds == null;

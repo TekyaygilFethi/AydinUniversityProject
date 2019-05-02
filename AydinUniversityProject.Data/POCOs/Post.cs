@@ -11,6 +11,11 @@ namespace AydinUniversityProject.Data.POCOs
     [Table("PostTable")]
     public class Post
     {
+        public Post()
+        {
+            FavouriteFeeds = new List<FavouriteFeeds>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
@@ -22,6 +27,11 @@ namespace AydinUniversityProject.Data.POCOs
         [ForeignKey("TopicID")]
         public virtual Topic Topic { get; set; }
 
+        [ForeignKey("LessonID")]
+        public virtual Lesson Lesson { get; set; }
+
+        public int LessonID { get; set; }
+
         public int TopicID { get; set; }
         
         public DateTime PostDate { get; set; }
@@ -31,10 +41,8 @@ namespace AydinUniversityProject.Data.POCOs
 
         public int SentFeedID { get; set; }
 
-        [ForeignKey("FavouriteFeedID")]
-        public virtual FavouriteFeeds FavouriteFeed { get; set; }
-
-        public int? FavouriteFeedID { get; set; }
+        public virtual List<FavouriteFeeds> FavouriteFeeds { get; set; }
+        
 
         public int FavouritedCount { get; set; }
     }

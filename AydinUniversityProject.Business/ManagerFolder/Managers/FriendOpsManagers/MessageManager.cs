@@ -20,7 +20,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.FriendOpsManage
 
         public void EditMessage(Message msg)
         {
-            messageRepository.Update(msg);
+            //messageRepository.Update(msg);
         }
 
         public Message GetMessage(int ID)

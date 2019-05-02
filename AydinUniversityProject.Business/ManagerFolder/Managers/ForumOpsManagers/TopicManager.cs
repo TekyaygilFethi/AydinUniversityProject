@@ -1,5 +1,4 @@
-﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ManagerBases;
-using AydinUniversityProject.Business.RepositoryFolder;
+﻿using AydinUniversityProject.Business.RepositoryFolder;
 using AydinUniversityProject.Data.POCOs;
 using System.Collections.Generic;
 
@@ -24,19 +23,24 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManager
             return topicRepository.GetAll();
         }
 
+        public List<Topic> GetAllTopicsOfStudent(int ID)
+        {
+            return topicRepository.GetBy(w => w.SentFeed.User.ID == ID);
+        }
+
         public void AddTopic(Topic topic)
         {
             topicRepository.Add(topic);
         }
 
-        public void DeleteTopic(Topic topic)
+        public void DeleteTopic(int ID)
         {
-            topicRepository.Delete(topic);
+            topicRepository.Delete(GetTopic(ID));
         }
 
         public void UpdateTopic(Topic topic)
         {
-            topicRepository.Update(topic);
+            //topicRepository.Update(topic);
         }
     }
 }

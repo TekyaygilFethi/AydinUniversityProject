@@ -1,6 +1,6 @@
-﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ManagerBases;
-using AydinUniversityProject.Business.RepositoryFolder;
+﻿using AydinUniversityProject.Business.RepositoryFolder;
 using AydinUniversityProject.Data.POCOs;
+using System.Collections.Generic;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManagers
 {
@@ -18,6 +18,18 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManager
             return postRepository.GetByID(ID);
         }
 
+        public List<Post> GetAllPostsOfStudent(int studentID)
+        {
+            return postRepository.GetBy(w => w.SentFeed.ID == studentID);
+        }
+
+        
+
+        public List<Post> GetAllPosts()
+        {
+            return postRepository.GetAll();
+        }
+
         public void AddPost(Post post)
         {
             postRepository.Add(post);
@@ -30,7 +42,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManager
 
         public void UpdatePost(Post post)
         {
-            postRepository.Update(post);
+            //postRepository.Update(post);
         }
 
     }

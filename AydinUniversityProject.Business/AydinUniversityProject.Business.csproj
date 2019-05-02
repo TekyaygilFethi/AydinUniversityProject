@@ -60,11 +60,13 @@
     <Compile Include="ManagerFolder\BaseManagers\ManagerBases\IBaseManager.cs" />
     <Compile Include="ManagerFolder\BaseManagers\MotherBases\MotherBaseManager.cs" />
     <Compile Include="ManagerFolder\BaseManagers\ComplexManagersBases\IBaseComplexManager.cs" />
+    <Compile Include="ManagerFolder\ComplexManagers\ForumOpsComplexManagers\ForumComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\StudentOpsComplexManagers\EducationOpsComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\UserOpsComplexManagers\AccountComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\UserOpsComplexManagers\FriendRequestsComplexManagers.cs" />
     <Compile Include="ManagerFolder\Managers\EducationOpsManagers\NoteManager.cs" />
     <Compile Include="ManagerFolder\Managers\EducationOpsManagers\PeriodManager.cs" />
+    <Compile Include="ManagerFolder\Managers\ForumOpsManagers\SentFeedManager.cs" />
     <Compile Include="ManagerFolder\Managers\FriendOpsManagers\FriendRelationshipManager.cs" />
     <Compile Include="ManagerFolder\Managers\ScreenShareOpsManagers\ConnectionManager.cs" />
     <Compile Include="ManagerFolder\Managers\ContactOpsManagers\ContactManager.cs" />

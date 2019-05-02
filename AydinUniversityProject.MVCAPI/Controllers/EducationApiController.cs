@@ -1,5 +1,8 @@
 ﻿using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentOpsComplexManagers;
+using AydinUniversityProject.Data.Business;
 using AydinUniversityProject.Data.Business.EducationComplexManagerData;
+using Microsoft.Ajax.Utilities;
+using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -50,7 +53,63 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         [Route("GetLessons")]
         public IHttpActionResult GetLessons([FromUri]GetPeriodFormData gpFormData)
         {
-            return Ok(educationComplexManager.GetLesson(gpFormData.Year,gpFormData.Term));
+            return Ok(educationComplexManager.GetLesson(gpFormData.Year, gpFormData.Term));
+        }
+
+        [HttpGet]
+        [Route("GetAllLessons")]
+        public IHttpActionResult GetAllLessons()
+        {
+            return Ok( educationComplexManager.GetAllLessons());
+        }
+
+        [HttpGet]
+        [Route("GetEducationsOfStudent")]
+        public IHttpActionResult GetEducationsOfStudent([FromUri]int ID)
+        {
+            return Ok(educationComplexManager.GetEducationsOfStudent(ID));
+        }
+
+        [HttpGet]
+        [Route("GetEducation")]
+        public IHttpActionResult GetEducation([FromUri]int ID)
+        {
+            return Ok(educationComplexManager.GetEducation(ID));
+        }
+
+        [HttpGet]
+        [Route("DeleteEducation/{ID}")]
+        public IHttpActionResult DeleteEducation(int ID)
+        {
+            TransactionObject response = educationComplexManager.DeleteEducation(ID);
+
+            if (response.IsSuccess)
+                return Ok();
+
+            else
+                return BadRequest(response.Explanation);
+        }
+
+        [HttpDelete]
+        [Route("DeleteNote")]
+        public IHttpActionResult DeleteNote(int ID)
+        {
+            return Ok(educationComplexManager.DeleteNote(ID));
+        }
+
+        [HttpPost]
+        [Route("EditNote")]
+        public IHttpActionResult EditNote(EditNoteFormData editedNote)
+        {
+            TransactionObject response = educationComplexManager.EditNote(editedNote);
+            if (response.IsSuccess)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(response.Explanation);
+            }
         }
     }
 }

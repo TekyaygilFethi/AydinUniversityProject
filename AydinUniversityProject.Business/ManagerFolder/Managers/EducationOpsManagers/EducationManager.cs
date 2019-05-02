@@ -20,7 +20,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
 
         public void EditEducation(Education edu)
         {
-            educationRepository.Update(edu);
+            //educationRepository.Update(edu);
         }
 
         public Education GetEducation(int ID)
@@ -36,6 +36,12 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
         public void DeleteEducation(Education edu)
         {
             educationRepository.Delete(edu);
+        }
+
+
+        public void DeleteEducation(int ID)
+        {
+            educationRepository.Delete(GetEducation(ID));
         }
 
         public bool IsEducationExists(int studentID, int lessonID)

@@ -1,0 +1,68 @@
+﻿@model AydinUniversityProject.Data.POCOs.Lesson
+@{
+    ViewBag.Title = "ForumFacultyDeps";
+    Layout = "~/Views/Shared/_ForumSharedLayout.cshtml";
+    int page = 0;
+    page = int.Parse(TempData["Page"].ToString());
+    string lastPostString = "--";
+}
+<h2>@Model.Name</h2>
+<div class="row">
+    @foreach (var topic in Model.Topics.ToList().GetRange(page * 15, Model.Topics.Count < (15 * (page + 1)) ? Model.Topics.Count % 15 : 15))
+    {
+        <div class="col-sm-12">
+            <div class="list-group">
+                <a href=@Url.Action("ForumDepartmentTopics",new { ID=topic.ID}) class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            @topic.Name
+                        </div>
+                        <div class="col-sm-1">
+                            <div style="border-left: 1px solid">
+                                &ensp; POSTS <br />&emsp;&emsp;
+                                @topic.Posts.Count
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div style="border-left: 1px solid">
+                                &ensp; LAST POST <br />&emsp;&emsp;
+                                @if (topic.Posts.OrderBy(o => o.PostDate).FirstOrDefault() != null && topic.Posts.OrderBy(o => o.PostDate).FirstOrDefault().SentFeed == null)
+                                {
+                                    lastPostString = topic.Posts.OrderBy(o => o.PostDate).FirstOrDefault().SentFeed.User.Username + " - " + topic.Posts.OrderBy(o => o.PostDate).FirstOrDefault().PostDate.ToShortDateString();
+                                }
+                                @lastPostString
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+    <div align="center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href='@Url.Action("ForumFacultyDeps",new { ID=Model.ID,page=(page==0 ? 0:page-1)})' aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @if (Model.Topics.Count / 15 == 0)
+                {
+                    <li><a href="#">1</a></li>
+                }
+                @if (Model.Topics.Count / 15 > 0)
+                {
+                    for (int i = 1; i <= Model.Topics.Count / 15; i++)
+                    {
+                        <li>@Html.ActionLink(i.ToString(), "LessonTopics", "Forum", new { ID = Model.ID, page = i }, null)</li>
+                    }
+                }
+                <li>
+                    <a href='@Url.Action("LessonTopics",new { ID=Model.ID,page=(page==0 ? 0:page+1)})' aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+﻿@model AydinUniversityProject.Data.POCOs.Education
+@{
+    ViewBag.Title = "Edit And Delete Score";
+    int counter = 0;
+}
+
+<h2>Edit and Delete Score</h2>
+
+<div class="form-horizontal">
+    <h4>Score</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @foreach (var item in Model.Notes)//değişiklik buradan başladı
+    {
+        using (Ajax.BeginForm("", "api/Education/EditNote", new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();", OnFailure = "alert(xhr.responseJSON);" }))
+        {
+            @Html.AntiForgeryToken()
+            @Ajax.ActionLink("Delete This Note", "", "api/Education/DeleteNote", new { ID = item.ID }, new AjaxOptions { HttpMethod = "DELETE", Confirm = "Are you sure you want to delete " + item.Description + " for the " + Model.Lesson.Name + " lesson?" })
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="hidden" class="form-control" value="@item.ID" id="ID"
+                           name="ID"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).ResultPoint, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).ResultPoint, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).ResultPoint, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).EffectRate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).EffectRate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Notes.SingleOrDefault(w => w.ID == item.ID).EffectRate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            counter++;
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        }
+    }
+    <br />
+    <hr />
+</div>
+<div>
+    @Html.ActionLink("Back to List", "ListEducations")
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function getDescription(int) {
+            return $('Notes[' + int + '].Description').val();
+        }
+
+        function getResultPoint(int) {
+            return $('Notes[' + int + '].ResultPoint').val();
+        }
+
+        function getEffect(int) {
+            return $('Notes[' + int + '].Effect').val();
+        }
+
+    </script>
+}

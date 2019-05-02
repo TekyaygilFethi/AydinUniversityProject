@@ -10,7 +10,6 @@ namespace AydinUniversityProject.Business.RepositoryFolder
     public interface IRepository<T> where T : class
     {
         void Add(T item);
-        void Update(T item);
         void Delete(T item);
         T GetByID(int ID);
         List<T> GetAll();

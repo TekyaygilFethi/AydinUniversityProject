@@ -20,7 +20,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
 
         public void EditLesson(Lesson lesson)
         {
-            lessonRepository.Update(lesson);
+            //lessonRepository.Update(lesson);
         }
 
         public Lesson GetLesson(int ID)
@@ -31,6 +31,11 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
         public List<Lesson> GetLessonsOfPeriod(int year, int term)
         {
             return lessonRepository.GetBy(w => w.Period.Semester == term && w.Period.Year == year);
+        }
+
+        public List<Lesson> GetAllLessons()
+        {
+            return lessonRepository.GetAll();
         }
 
         public void DeleteLesson(Lesson lesson)

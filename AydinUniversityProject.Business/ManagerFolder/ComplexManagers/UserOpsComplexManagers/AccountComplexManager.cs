@@ -106,7 +106,7 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
                 User currentUser = userManager.GetUserByUsername(lgn.Username);
                 SetOnlineStatus(userManager.GetUser(currentUser.ID), true);
                 uow.Save();
-                response.Student = currentUser.Student;
+                response.ID = currentUser.ID;
             }
             return response;
         }
@@ -169,6 +169,11 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
         public Student GetStudent(int ID)
         {
             return stdManager.GetStudent(ID);
+        }
+
+        public User GetUser(int ID)
+        {
+            return userManager.GetUser(ID);
         }
 
         public List<string> GetAllUsernames()

@@ -1,0 +1,230 @@
+﻿@model AydinUniversityProject.Data.Business.ForumComplexManager.TopicPageFormData
+@using AydinUniversityProject.MVCAPI.HtmlHelperFolder
+@{
+
+    ViewBag.Title = "TopicPage";
+    Layout = "~/Views/Shared/_ForumSharedLayout.cshtml";
+    int page = 0;
+    int userID = Session["User"] == null ? 0 : (int)Session["Student"];
+    var user = userID == 0 ? null : (ViewData["User"] as AydinUniversityProject.Data.POCOs.User);
+    bool IsAdmin = user == null ? false : (Session["User"] as AydinUniversityProject.Data.POCOs.User).IsAdmin;
+    page = int.Parse(TempData["Page"].ToString());
+    int anchoredPostID = TempData["anchoredPostID"] == null ? 0 : int.Parse(TempData["anchoredPostID"].ToString());
+}
+@section SubStyles{
+    <link href="~/Content/imgur/imgur.min.css" rel="stylesheet" />
+}
+<h2>
+    @Model.Topic.Name
+    <div align="right">
+
+        @if (user != null && user.FavouriteFeeds != null)
+        {
+            if (!user.FavouriteFeeds.FavouriteTopics.Contains(Model.Topic))
+            {
+                <div class="btn btn-default" id="btnToggleFav"><span class="glyphicon glyphicon-star-empty" id="favStar"></span></div>
+            }
+            if (user.FavouriteFeeds.FavouriteTopics.Contains(Model.Topic))
+            {
+                <div class="btn btn-default" id="btnToggleFav"><span class="glyphicon glyphicon-star" id="favStar"></span></div>
+            }
+        }
+        @if (user != null && user.FavouriteFeeds == null)
+        {
+            <div class="btn btn-default" id="btnToggleFav"><span class="glyphicon glyphicon-star-empty" id="favStar"></span></div>
+        }
+    </div>
+</h2>
+
+<input type="hidden" id="anchoredPostArea" value="@anchoredPostID" />
+
+@if (user != null && user.SentFeeds != null)
+{
+    if (user.SentFeeds.SentTopics.Contains(Model.Topic))
+    {
+        <div align="right">
+            @Ajax.ActionLink("Delete This Topic", "", "api/Forum/DeleteTopic", new { ID = Model.Topic.ID }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to delete this topic?", OnSuccess = "window.location.href='" + Url.Action("Index", "Forum") + "';", OnFailure = "alert('Error occured!');" })
+        </div>
+    }
+}
+<hr />
+<br />
+<div class="row">
+    <input type="hidden" id="topicID" value="@Model.Topic.ID" />
+
+    @foreach (var post in Model.Topic.Posts.ToList().GetRange(page * 15, Model.Topic.Posts.Count < (15 * (page + 1)) ? Model.Topic.Posts.Count % 15 : 15))
+    {
+        <div class="col-sm-9" id="postArea-@post.ID">
+            <div style="border:2px solid black; height:220px" id="postBorder"> @Html.Raw(post.Content)</div>
+        </div>
+
+        <div class="col-sm-3">
+            <div style="border: 5px dashed red; height:220px">
+                <div align="center">
+                    <br />
+                    <img src='@Model.ProfilePhotoFormDatas.SingleOrDefault(w => w.ID == post.SentFeed.User.ID).Base64Image' width="auto" height="100px" />
+                    <br />
+                    @post.SentFeed.User.Username
+                    <br />
+                    <h4>-<i>@post.SentFeed.User.Student.NameSurname</i>-</h4>
+                    <h5>POST DATE:@post.PostDate</h5><br />
+                </div>
+            </div>
+            <div align="right">
+                @if (user != null && user.FavouriteFeeds != null)
+                {
+                    if (!user.FavouriteFeeds.FavouritePosts.Contains(post))
+                    {
+                        @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star-empty\" id=\"favStar\"></span></div>"), "", "api/Forum/ToggleFavPost", new { contentID = post.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "window.location.reload();", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
+                    }
+                    if (user.FavouriteFeeds.FavouritePosts.Contains(post))
+                    {
+                        @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star\" id=\"favStar\"></span></div>"), "", "api/Forum/ToggleFavPost", new { contentID = post.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "window.location.reload();", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
+                    }
+                }
+                @if (user != null && user.FavouriteFeeds == null)
+                {
+                    @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star-empty\" id=\"favStar\"></span></div>"), "", "api/Forum/ToggleFavPost", new { contentID = post.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "window.location.reload();", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
+                }
+
+                @if (post.SentFeed.User.ID == userID || IsAdmin)
+                {
+                    @Ajax.ActionLink("Edit Post |", "EditPostPartial", new { ID = post.ID }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "postArea-" + post.ID })
+                    @Ajax.ActionLink("Delete Post", "DeletePost", new { ID = post.ID }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();", OnFailure = "window.location.reload()" })
+                }
+            </div>
+        </div>
+        <dix class="clearfix"></dix>
+        <br />
+        <br />
+        //idCount++;
+    }
+    <div class="col-sm-12" align="center">
+        <br />
+        <br />
+        <div class="form-group">
+            <label for="comment">POST:</label>
+            <textarea class="form-control" rows="8" id="post" style="resize:none;min-width:100%;"></textarea>
+        </div>
+
+        <div class="col-md-12">
+            <div class="btn btn-primary" id="btnUpload"><span class="glyphicon glyphicon-upload"></span>UPLOAD </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div align="left">
+        <div class="btn btn-success" id="btnSendPost">
+            SEND POST
+        </div>
+    </div>
+    <br />
+    <div class="col-sm-12" id="dropzone">
+        <div class="dropzone" style="visibility:hidden"></div>
+    </div>
+
+
+    <div align="center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href='@Url.Action("TopicPosts",new { ID=Model.Topic.ID,page=(page==0 ? 0:page-1)})' aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @if (Model.Topic.Posts.Count / 15 == 0)
+                {
+                    <li><a href="#">1</a></li>
+                }
+                @if (Model.Topic.Posts.Count / 15 > 0)
+                {
+                    for (int i = 1; i <= (Model.Topic.Posts.Count / 15) + 1; i++)
+                    {
+                        <li>@Html.ActionLink(i.ToString(), "TopicPosts", "Forum", new { ID = Model.Topic.ID, page = i }, null)</li>
+                    }
+                }
+                <li>
+                    <a href='@Url.Action("TopicPosts",new { ID=Model.Topic.ID,page=page+2})' aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+@section SubScripts{
+    <script src="~/Scripts/imgur/imgur.min.js"></script>
+    <script type="text/javascript">
+    var feedback = function (res) {
+        if (res.success === true) {
+            var status = document.querySelector('.status');
+            var p = document.createElement('p');
+            var t = document.createTextNode('Image url: ' + res.data.link);
+                $('#Content').append(res.data.link);
+            p.appendChild(t);
+
+            status.classList.add('bg-success');
+            status.appendChild(p);
+            // document.querySelector('.status').innerHTML = 'Image url: ' + res.data.link;
+        }
+    };
+
+    new Imgur({
+        clientid: '8a8439a282bc4e7',
+        callback: feedback
+    });
+
+        function ToggleFailure(xhr, error, status){
+            alert(xhr.responseJSON);
+        }
+
+    $(function () {
+
+        if ($('#anchoredPostArea').val() != -1) {
+            location.hash = "postArea-" + $('#anchoredPostArea').val();
+        }
+
+        $('#btnUpload').click(function () {
+            if ($('.dropzone').css("visibility") == 'hidden') {
+                $('.dropzone').css('visibility', 'visible');
+            }
+            else {
+                $('.dropzone').css('visibility', 'hidden');
+            }
+        });
+
+        $('#btnToggleFav').click(function () {
+            var topicID = $('#topicID').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ToggleFavTopic")',
+                dataType: 'json',
+                data: { ID: topicID },
+                success: function () {
+                    window.location.reload();
+                }, error: function () {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $('#btnSendPost').click(function () {
+            var postContent = $('#post').val();
+            var topicID = $('#topicID').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SendPost")',
+                dataType: 'json',
+                data: { topicID: topicID, postContent: postContent },
+                success: function () {
+                    window.location.reload();
+                }, error: function () {
+                    window.location.reload();
+                }
+            });
+        });
+    });
+    </script>
+}

@@ -60,7 +60,7 @@ namespace AydinUniversityProject.MVCAPI.Controllers
 
 
                 //return Ok(JsonConvert.SerializeObject(response, Formatting.Indent, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-                return Ok(response.Student);
+                return Ok(response.ID);
             }
             else
                 return BadRequest(response.TransactionObject.Explanation);
@@ -86,12 +86,13 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             return Ok(accountManager.GetStudent(studentID));
         }
 
-        //[Route("GetUser")]
-        //public IHttpActionResult GetUser(int userID)
-        //{
-        //    return Ok(accountManager.GetUser(userID));
-        //}
-        
+        [HttpGet]
+        [Route("GetUser")]
+        public IHttpActionResult GetUser(int userID)
+        {
+            return Ok(accountManager.GetUser(userID));
+        }
+
         [HttpGet]
         [Route("GetAllUsernames")]
         public IHttpActionResult GetAllUsernames()

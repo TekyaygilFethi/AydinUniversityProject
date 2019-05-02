@@ -34,7 +34,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.FriendOpsManage
 
         public void UpdateRequest(FriendRequest fr)
         {
-            friendRequestRepository.Update(fr);
+            //friendRequestRepository.Update(fr);
         }
 
         public bool CheckExistence(int senderID, int receiverID)

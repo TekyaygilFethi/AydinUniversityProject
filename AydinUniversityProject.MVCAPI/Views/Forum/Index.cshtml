@@ -1,0 +1,84 @@
+﻿@model IEnumerable<AydinUniversityProject.Data.POCOs.Lesson>
+
+@{
+    Layout = "~/Views/Shared/_ForumSharedLayout.cshtml";
+}
+<div class="clearfix"></div>
+<div class="row">
+    @foreach (var lesson in Model)
+    {
+        <div class="col-sm-12">
+            <div class="list-group">
+                <a href=@Url.Action("LessonTopics",new { ID=lesson.ID}) class="list-group-item active">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            @lesson.Name
+                        </div>
+                        <div class="col-sm-1">
+                            <div style="border-left: 1px solid">
+                                &ensp; TOPICS <br />&emsp;&emsp;
+                                @lesson.Topics.Count
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div style="border-left: 1px solid">
+                                &ensp; POSTS <br />&emsp;&emsp;
+                                @lesson.PostCount
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            @if (lesson.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault() == null)
+                            {
+                                <div style="border-left: 1px solid">
+                                    &ensp; last post <br />&emsp;&emsp;
+                                    --
+                                </div>
+                            }
+                            @if (lesson.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault() != null)
+                            {
+                                <div style="border-left: 1px solid">
+                                    &ensp; last post <br />&emsp;&emsp;
+                                    @lesson.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault().Topic.Name - @lesson.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault().SentFeed.User.Username
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </a>
+                @foreach (var topic in lesson.Topics.Take(5))
+                {
+                    <a href=@Url.Action("TopicPosts",new { ID=topic.ID}) class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                @topic.Name
+                            </div>
+                            <div class="col-sm-1">
+                                <div style="border-left: 1px solid">
+                                    &ensp; POSTS <br />&emsp;&emsp;
+                                    @topic.Posts.Count
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                @if (topic.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault() == null)
+                                {
+                                    <div style="border-left: 1px solid">
+                                        &ensp; LAST POST <br />&emsp;&emsp;
+                                        --
+                                    </div>
+                                }
+                                @if (topic.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault() != null)
+                                {
+                                    <div style="border-left: 1px solid">
+                                        &ensp; LAST POST  - @topic.Posts.OrderByDescending(o => o.PostDate).ToList().FirstOrDefault().PostDate<br />&emsp;&emsp;
+                                        @topic.Name - @topic.Posts.OrderByDescending(o => o.PostDate).ToList().FirstOrDefault().SentFeed.User.Username
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                    </a>
+                }
+            </div>
+        </div>
+        <br />
+    }
+</div>

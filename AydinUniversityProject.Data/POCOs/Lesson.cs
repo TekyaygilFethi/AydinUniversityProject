@@ -12,6 +12,7 @@ namespace AydinUniversityProject.Data.POCOs
             Educations = new List<Education>();
             Connections = new List<Connection>();
             Topics = new List<Topic>();
+            Posts = new List<Post>();
         }
 
         [Key]
@@ -26,6 +27,8 @@ namespace AydinUniversityProject.Data.POCOs
 
         public virtual List<Topic> Topics { get; set; }
 
+        public virtual List<Post> Posts { get; set; }
+
         [ForeignKey("PeriodID")]
         public virtual Period Period { get; set; }
 
@@ -34,5 +37,16 @@ namespace AydinUniversityProject.Data.POCOs
         public double Credit { get; set; }
 
         public double ECTSCredit { get; set; }
+
+        public int PostCount
+        {
+            get
+            {
+                int x = 0;
+                Topics.ForEach(topic => x += topic.Posts.Count);
+                return x;
+            }
+        }
+
     }
 }

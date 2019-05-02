@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "List Educations";
+}
+<h2>ListEducations</h2>
+<p>
+    @Html.ActionLink("Add New Note", "AddNote", "Student")
+</p>
+<input type="hidden" id="StudentID" value="@TempData["StudentID"]" />
+<table class="table"></table>
+@section Scripts{
+    <script>
+        $(function () {
+            $.ajax({
+                method: "GET",
+                url: '@Url.Action("", "api/Education/GetEducationsOfStudent")',
+                dataType: 'json',
+                data: { ID: $('#StudentID').val()},
+                success: function (educations) {
+                    $(".table").empty();
+                    $(".table").append("<tr><th>Year</th><th>Term</th><th>Lesson</th><th>Average</th></tr>");
+                    $.each(educations, function (i, education) {
+                        $(".table").append('<tr><td>' + education.Lesson.Period.Year + '</td><td>' + education.Lesson.Period.Semester + '</td><td>' + education.Lesson.Name + '</td><td>' + education.Average + '</td><td id='+education.ID+'>  @Html.ActionLink("Edit", "EditEducation","Student",null,new { @onclick="OnEditClick(this)"}) | @Html.ActionLink("Details", "EducationDetails","Student",null,new { @onclick="OnDetailClick(this)" }) |@Ajax.ActionLink("Delete", "","api/Education/DeleteEducation", null, new AjaxOptions { HttpMethod="GET",Confirm="Are you sure you want to delete this University? All The Lesson and Note informations will be wiped out!",OnSuccess="window.location.reload();",OnFailure="alert(xhr.responseJSON);"},new { @onclick="OnDeleteClick(this)"})</td></tr>');
+                    })
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseJSON);
+                },
+            });
+        });
+
+
+        function OnEditClick(elem) {
+            $(elem).attr('href', $(elem).attr('href') + '/' + $(elem).parent().attr("id"));
+        };
+
+        function OnDetailClick(elem) {
+            $(elem).attr('href', $(elem).attr('href') + '/' + $(elem).parent().attr("id"));
+        };
+
+        function OnDeleteClick(elem) {
+            $(elem).attr('href', $(elem).attr('href') + '/' + $(elem).parent().attr("id"));
+        }
+    </script>
+}

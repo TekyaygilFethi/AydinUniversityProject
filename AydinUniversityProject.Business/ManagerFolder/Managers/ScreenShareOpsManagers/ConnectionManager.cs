@@ -20,7 +20,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ScreenShareOpsM
 
         public void EditConnection(Connection connection)
         {
-            connectionRepository.Update(connection);
+            //connectionRepository.Update(connection);
         }
 
         public Connection GetConnection(int ID)

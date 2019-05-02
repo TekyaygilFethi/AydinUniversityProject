@@ -3,6 +3,7 @@
     @*@ViewBag.Title = Model.User.Username + "'s Profile";*@
     bool isFavFeedNull = Model.User.FavouriteFeeds == null;
     bool isSentFeedNull = Model.User.SentFeeds == null;
+    int counter = 1;
 }
 <link href="~/Content/educationdetail-css.css" rel="stylesheet" />
 <br />
@@ -24,7 +25,7 @@
         </div>
     </div>
     <div class="col-md-12">
-        @if ((bool)TempData["IsLocalUser"] == false && (bool)TempData["IsLogged"]==true)
+        @if ((bool)TempData["IsLocalUser"] == false && (bool)TempData["IsLogged"] == true)
         {
             if ((bool)TempData["IsSentRequest"] != false)
             {
@@ -121,12 +122,17 @@
                         </div>
 
                         <div class="pull-left">
-                            LESSON COUNT: @education.Key.Lessons.Count
-                        </div>
-                        <div class="pull-right">
-                            @*AVERAGE: @education.Key.Educations.Select(each => each.*@
+                            LESSON COUNT: @Model.Educations.Where(w => w.Lesson.PeriodID == education.Key.ID).Count()
                         </div>
                         <br />
+                        <div class="pull-left">
+                            @counter )
+                        </div>
+                        <div class="pull-right">
+                            @Model.Educations.Where(w => w.Lesson.PeriodID == education.Key.ID).ToList()[counter - 1].Lesson.Name
+                        </div>
+                        <br />
+                        counter++;
 
                     }
                 }

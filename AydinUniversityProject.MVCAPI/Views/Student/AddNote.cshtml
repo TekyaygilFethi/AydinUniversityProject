@@ -86,7 +86,7 @@
         </div>
     </div>
 }
-@Html.ActionLink("Back to List", "ListLessons", "Student")
+@Html.ActionLink("Back to List", "ListEducations", "Student")
 
 @section Scripts{
     <script type="text/javascript">
@@ -110,13 +110,14 @@
 
 
             $('#Year').change(function () {
-                $('#LessonName').empty();
+                
                 $.ajax({
                     type: 'GET',
                     url: '@Url.Action("","api/Education/GetLessons")',
                     dataType: 'json',
                     data: { Year: $("#Year").val(),Term:$('#Term').val() },
                     success: function (lessons) {
+                        $('#LessonID').empty();
                         $.each(lessons, function (i, lesson) {
                             $("#LessonID").append('<option value="' + lesson.ID + '">' +
                                 lesson.Name + '</option>');
@@ -129,7 +130,7 @@
             });
 
             $('#Term').change(function () {
-                $('#LessonName').empty();
+                
 
                 $.ajax({
                     type: 'GET',
@@ -137,8 +138,9 @@
                     dataType: 'json',
                     data: { Year: $("#Year").val(), Term: $('#Term').val() },
                     success: function (lessons) {
+                        $('#LessonID').empty();
                         $.each(lessons, function (i, lesson) {
-                            $("#LessonName").append('<option value="' + lesson.ID + '">' +
+                            $("#LessonID").append('<option value="' + lesson.ID + '">' +
                                                      lesson.Name + '</option>');
                         })
                     }, error: function (ex) {
@@ -155,7 +157,7 @@
         {
             alert("Lesson creation successful!");
 
-            window.location.href = '@Url.Action("ListLessons","Student")';
+            window.location.href = '@Url.Action("ListEducations","Student")';
         }
         function AccountCreationFailure(xhr, status, error) {
             alert(xhr.responseJSON.Message);

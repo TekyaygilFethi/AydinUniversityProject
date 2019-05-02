@@ -30,7 +30,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
 
         public void Editperiod(Period period)
         {
-            periodRepository.Update(period);
+            //periodRepository.Update(period);
         }
 
         public Period GetPeriod(int ID)

@@ -61,6 +61,22 @@
     <Compile Include="Migrations\201904191347578_Migration2.Designer.cs">
       <DependentUpon>201904191347578_Migration2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904201029424_Mig.cs" />
+    <Compile Include="Migrations\201904201029424_Mig.Designer.cs">
+      <DependentUpon>201904201029424_Mig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904210819162_AddSortOrder.cs" />
+    <Compile Include="Migrations\201904210819162_AddSortOrder.Designer.cs">
+      <DependentUpon>201904210819162_AddSortOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904230900002_AddSortOrder1.cs" />
+    <Compile Include="Migrations\201904230900002_AddSortOrder1.Designer.cs">
+      <DependentUpon>201904230900002_AddSortOrder1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904261316489_AddSortOrder2.cs" />
+    <Compile Include="Migrations\201904261316489_AddSortOrder2.Designer.cs">
+      <DependentUpon>201904261316489_AddSortOrder2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +99,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904191347578_Migration2.resx">
       <DependentUpon>201904191347578_Migration2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904201029424_Mig.resx">
+      <DependentUpon>201904201029424_Mig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904210819162_AddSortOrder.resx">
+      <DependentUpon>201904210819162_AddSortOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904230900002_AddSortOrder1.resx">
+      <DependentUpon>201904230900002_AddSortOrder1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904261316489_AddSortOrder2.resx">
+      <DependentUpon>201904261316489_AddSortOrder2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

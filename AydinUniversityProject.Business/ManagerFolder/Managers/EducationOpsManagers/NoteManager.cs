@@ -1,5 +1,6 @@
 ﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ManagerBases;
 using AydinUniversityProject.Business.RepositoryFolder;
+using AydinUniversityProject.Data.Business.EducationComplexManagerData;
 using AydinUniversityProject.Data.POCOs;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsManagers
@@ -23,9 +24,13 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.EducationOpsMan
             noteRepository.Add(note);
         }
 
-        public void EditNote(Note note)
+        public void EditNote(EditNoteFormData note)
         {
-            noteRepository.Update(note);
+            var oldNote=GetNote(note.ID);
+            oldNote.Description = note.Description;
+            oldNote.EffectRate = note.EffectRate;
+            oldNote.ResultPoint = note.ResultPoint;
+            
         }
 
         public Note GetNote(int ID)

@@ -9,7 +9,7 @@ namespace AydinUniversityProject.Data.Business.AccountComplexManagerData
 {
     public class LoginResponseObject
     {
-        public Student Student { get; set; }
+        public int ID { get; set; }
 
         public TransactionObject TransactionObject { get; set; }
     }

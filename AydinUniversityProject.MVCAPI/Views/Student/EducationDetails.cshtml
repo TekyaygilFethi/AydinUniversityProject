@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "SeeEducationDetails";
+}
+
+<link href="~/Content/education-detail.css" rel="stylesheet" />
+
+<div class="container">
+    <input type="hidden" id="ID" value="@TempData["educationID"]" />
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h3 class="pull-right" id="period"></h3>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="pull-right">
+                            @Ajax.ActionLink("Delete This Lesson", "", "api/Education/DeleteEducation", null, new AjaxOptions { HttpMethod = "GET", Confirm = "Are you sure you want to delete this lesson?", OnSuccess = "(function(){window.location.href=" + Url.Action("ListEducations", "Student") + ";})" }, new { @class = "btn btn-danger", @onclick = "OnDeleteClick(this)" }) &emsp;&emsp; @Html.ActionLink("Edit This Lesson", "EditEducation", "Student", null, new { @onclick = "OnEditClick(this)" })
+                        </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr id="head"></tr>
+                            </thead>
+                            <tbody>
+                                <tr id="body"></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*</div>*@
+@Html.ActionLink("Add New Lesson", "AddNote", "Student")
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $.ajax({
+                method: 'GET',
+                url: '@Url.Action("","api/Education/GetEducation")',
+                data: {ID:$('#ID').val()},
+                dataType: 'json',
+                success: function (education) {
+                    $('#period').html(education.Lesson.Period.Year + 'th year ' + education.Lesson.Period.Semester + ' th term');
+                    $('#lesson').html(education.Lesson);
+                    $('.panel-title').attr('id', education.ID);
+                    $('.panel-title').prepend(education.Lesson.Name);
+
+                    $.each(education.Notes, function (i, note) {
+                        $("#head").append('<td><strong>' + note.Description + '</strong></td>');
+                        $("#body").append('<td><strong>' + note.ResultPoint + '  (' + note.EffectRate + '%)</strong></td>');
+                    });
+                    $("#head").append('<td><strong>Average</strong></td>');
+                    $("#body").append('<td><strong>' + education.Average + '</strong></td>');
+                },
+                error: function (xhr, error, status) {
+                    alert(xhr.responseJSON);
+                }
+            });
+        });
+
+        function OnDeleteClick(elem) {
+            $(elem).attr('href', $(elem).attr('href') + '/' + $('#ID').val());
+        }
+            //function OnAddClick(elem) {
+            //    $(elem).attr('href', $(elem).attr('href') + '/' + $('#ID').val());
+            //}
+    </script>
+}

@@ -53,8 +53,14 @@
     <Compile Include="Business\AccountComplexManagerData\LoginResponseObject.cs" />
     <Compile Include="Business\AccountComplexManagerData\LogOffFormData.cs" />
     <Compile Include="Business\EducationComplexManagerData\AddLessonFormData.cs" />
+    <Compile Include="Business\EducationComplexManagerData\EditNoteFormData.cs" />
     <Compile Include="Business\EducationComplexManagerData\GetPeriodFormData.cs" />
     <Compile Include="Business\EducationComplexManagerData\GetPeriodResponseObject.cs" />
+    <Compile Include="Business\ForumComplexManager\ForumIndexFormData.cs" />
+    <Compile Include="Business\ForumComplexManager\GenericToggleFavFormData.cs" />
+    <Compile Include="Business\ForumComplexManager\NewTopicFormData.cs" />
+    <Compile Include="Business\ForumComplexManager\ProfilePhotoFormData.cs" />
+    <Compile Include="Business\ForumComplexManager\TopicPageFormData.cs" />
     <Compile Include="Business\FriendRequestsComplexManagerData\AllFriendRequestsResponseObject.cs" />
     <Compile Include="Business\TransactionObject.cs" />
     <Compile Include="POCOs\Connection.cs" />

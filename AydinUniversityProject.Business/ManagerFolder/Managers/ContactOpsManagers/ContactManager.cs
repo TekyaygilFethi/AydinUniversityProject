@@ -20,7 +20,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ContactOpsManag
 
         public void EditContact(Contact contact)
         {
-            contactRepository.Update(contact);
+            //contactRepository.Update(contact);
         }
 
         public Contact GetContact(int ID)

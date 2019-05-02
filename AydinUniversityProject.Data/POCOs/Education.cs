@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AydinUniversityProject.Data.POCOs
 {
@@ -19,18 +15,21 @@ namespace AydinUniversityProject.Data.POCOs
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        
+
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
-                
+
         [ForeignKey("LessonID")]
         public virtual Lesson Lesson { get; set; }
 
         public virtual List<Note> Notes { get; set; }
-        
+
         public int StudentID { get; set; }
 
         public int LessonID { get; set; }
+
+        [NotMapped]
+        public double avg;
 
         public double Average { get; set; }
     }

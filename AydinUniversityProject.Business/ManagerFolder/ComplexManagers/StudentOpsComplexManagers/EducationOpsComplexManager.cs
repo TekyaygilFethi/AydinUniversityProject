@@ -60,10 +60,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
 
 
                     noteManager.AddNote(note);
-
-                    uow.Save();
-                    response.IsSuccess = true;
-                }
+                                    }
                 else
                 {
                     education = new Education();
@@ -89,9 +86,16 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
                     noteManager.AddNote(note);
                     educationManager.AddEducation(education);
 
-                    uow.Save();
-                    response.IsSuccess = true;
                 }
+                
+                double avg = 0;
+                education.Notes.ForEach(note => avg += (note.EffectRate / 100) * note.ResultPoint);
+                education.Average = avg;
+
+                uow.Save();
+                    response.IsSuccess = true;
+
+
             }
             catch (Exception ex)
             {
@@ -99,7 +103,35 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
                 response.Explanation = base.GetExceptionMessage(ex);
             }
 
+
             return response;
+        }
+
+        public TransactionObject DeleteEducation(int ID)
+        {
+            TransactionObject response = new TransactionObject();
+            try
+            {
+                educationManager.DeleteEducation(ID);
+                uow.Save();
+                response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Explanation = base.GetExceptionMessage(ex);
+            }
+            return response;
+        }
+
+        public List<Education> GetEducationsOfStudent(int ID)
+        {
+            return studentManager.GetStudent(ID).Educations;
+        }
+        
+        public Education GetEducation(int ID)
+        {
+            return educationManager.GetEducation(ID);
         }
 
         #region Lesson Ops
@@ -143,16 +175,21 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
         {
             return lessonManager.GetLessonsOfPeriod(year, term);
         }
+
+        public List<Lesson> GetAllLessons()
+        {
+           return lessonManager.GetAllLessons();
+        }
         #endregion
 
         #region Note Ops
-        public TransactionObject EditNote(int noteID)
+        public TransactionObject EditNote(EditNoteFormData note)
         {
             TransactionObject response = new TransactionObject();
 
             try
             {
-                noteManager.EditNote(noteManager.GetNote(noteID));
+                noteManager.EditNote(note);
 
                 uow.Save();
                 response.IsSuccess = true;
