@@ -171,9 +171,14 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
             return response;
         }
 
-        public List<Lesson> GetLesson(int year, int term)
+        public List<Lesson> GetLessonsOfTerm(int year, int term)
         {
             return lessonManager.GetLessonsOfPeriod(year, term);
+        }
+
+        public Lesson GetLesson(int lessonID)
+        {
+            return lessonManager.GetLesson(lessonID);
         }
 
         public List<Lesson> GetAllLessons()

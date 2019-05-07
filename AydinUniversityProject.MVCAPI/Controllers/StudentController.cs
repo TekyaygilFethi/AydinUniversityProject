@@ -1,22 +1,48 @@
-﻿using AydinUniversityProject.Data.Business.ForumComplexManager;
-using AydinUniversityProject.Data.POCOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentOpsComplexManagers;
+using AydinUniversityProject.Data.Business;
+using AydinUniversityProject.Data.Business.EducationComplexManagerData;
+using AydinUniversityProject.MVCAPI.Filters;
 using System.Web.Mvc;
 
 namespace AydinUniversityProject.MVCAPI.Controllers
 {
+    [GenericActionFilter]
     public class StudentController : Controller
     {
+        private static EducationOpsComplexManager educationComplexManager = new EducationOpsComplexManager();
 
         // GET: Student
         public ActionResult AddNote()
         {
             TempData["StudentID"] = (int)Session["Student"];
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddLesson(AddLessonFormData addLessonFormData)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = educationComplexManager.AddLesson(addLessonFormData);
+
+                if (response.IsSuccess)
+                    return Json(new { IsSuccess = true });
+
+                else
+                    return Json(new { IsSuccess = false, Error = response.Explanation });
+            }
+            else
+            {
+                string message = string.Empty;
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        message += error.ErrorMessage + "\n";
+                    }
+                }
+                return Json(new { IsSuccess = false, Error = message });
+            }
         }
 
         public ActionResult ListEducations()
@@ -31,98 +57,46 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             return View();
         }
 
-        public async Task<ActionResult> EditEducation(int ID)
+        public ActionResult EditEducation(int ID)
         {
-            string apiUrl = Url.Action("", "api/Education/GetEducation", null, Request.Url.Scheme);
-            apiUrl += "?ID=" + ID;
-            Education education = null;
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var data = await response.Content.ReadAsStringAsync();
-                    education = Newtonsoft.Json.JsonConvert.DeserializeObject<Education>(data);
-                }
-            }
+            var education = educationComplexManager.GetEducation(ID);
             return View(education);
         }
 
-        public async Task<ActionResult> TopicPosts(int ID, int? page, int? anchoredPostID)
+        [HttpPost]
+        public JsonResult EditNote(EditNoteFormData editedNote)
         {
-            string apiUrl = Url.Action("", "api/Education/GetTopic", null, Request.Url.Scheme);
-            apiUrl += "?ID=" + ID;
-            Topic topic = null;
-            using (HttpClient client = new HttpClient())
+            TransactionObject response = educationComplexManager.EditNote(editedNote);
+            if (response.IsSuccess)
             {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var data = await response.Content.ReadAsStringAsync();
-                    topic = Newtonsoft.Json.JsonConvert.DeserializeObject<Topic>(data);
-                }
+                return Json(new { IsSuccess = true });
             }
-
-
-            apiUrl = Url.Action("", "api/Education/GetUser", null, Request.Url.Scheme);
-            apiUrl += "?ID=" + ID;
-            User user = null;
-            using (HttpClient client = new HttpClient())
+            else
             {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var data = await response.Content.ReadAsStringAsync();
-                    user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(data);
-                }
+                return Json(new { IsSuccess = false, Error = response.Explanation });
             }
+        }
 
-            ViewData["User"] = user;
+        [HttpPost]
+        public JsonResult DeleteEducation(int ID)
+        {
+            TransactionObject response = educationComplexManager.DeleteEducation(ID);
 
-            int _page = page == null ? 0 : page.Value - 1;
+            if (response.IsSuccess)
+                return Json(new{ IsSuccess=true});
 
-            TempData["Page"] = _page;
-            List<ProfilePhotoFormData> ppfdList = new List<ProfilePhotoFormData>();
+            else
+                return Json(new { IsSuccess = false,Error=response.Explanation }); 
+        }
 
-            if (anchoredPostID != null)
-            {
-                TempData["anchoredPostID"] = (int)anchoredPostID;
+        public JsonResult GetEducationsOfStudent(int ID)
+        {
+            return Json(educationComplexManager.GetEducationsOfStudent(ID),JsonRequestBehavior.AllowGet);
+        }
 
-                Post anchoredPost = topic.Posts.SingleOrDefault(w => w.ID == anchoredPostID);
-
-                _page = topic.Posts.IndexOf(anchoredPost) % 15 == 0 ? topic.Posts.IndexOf(anchoredPost) / 15 : (topic.Posts.IndexOf(anchoredPost) / 15);
-                TempData["Page"] = _page;
-
-            }
-            if (topic.Posts != null)
-            {
-                foreach (var item in topic.Posts)
-                {
-                    if (ppfdList.SingleOrDefault(w => w.ID == item.SentFeed.User.ID) == null)
-                    {
-                        ProfilePhotoFormData ppfd = new ProfilePhotoFormData();
-                        ppfd.ID = item.SentFeed.User.ID;
-                        ppfd.Base64Image = item.SentFeed.User.ProfilePhoto;
-                        ppfdList.Add(ppfd);
-                    }
-                }
-            }
-            TopicPageFormData tpfd = new TopicPageFormData();
-            tpfd.Topic = topic;
-            tpfd.ProfilePhotoFormDatas = ppfdList;
-            return View(tpfd);
+        public JsonResult GetEducation(int ID)
+        {
+            return Json(educationComplexManager.GetEducation(ID),JsonRequestBehavior.AllowGet);
         }
     }
 }

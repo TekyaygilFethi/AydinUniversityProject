@@ -2,6 +2,9 @@
 using AydinUniversityProject.Data.Business;
 using AydinUniversityProject.Data.Business.EducationComplexManagerData;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
 using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -53,14 +56,15 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         [Route("GetLessons")]
         public IHttpActionResult GetLessons([FromUri]GetPeriodFormData gpFormData)
         {
-            return Ok(educationComplexManager.GetLesson(gpFormData.Year, gpFormData.Term));
+            return Ok(educationComplexManager.GetLessonsOfTerm(gpFormData.Year, gpFormData.Term));
         }
 
         [HttpGet]
         [Route("GetAllLessons")]
         public IHttpActionResult GetAllLessons()
         {
-            return Ok( educationComplexManager.GetAllLessons());
+            var list = educationComplexManager.GetAllLessons()[0];
+                return Ok(list);
         }
 
         [HttpGet]

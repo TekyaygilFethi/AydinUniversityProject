@@ -12,7 +12,7 @@
         $(function () {
             $.ajax({
                 method: "GET",
-                url: '@Url.Action("", "api/Education/GetEducationsOfStudent")',
+                url: '@Url.Action("GetEducationsOfStudent", "Student")',
                 dataType: 'json',
                 data: { ID: $('#StudentID').val()},
                 success: function (educations) {

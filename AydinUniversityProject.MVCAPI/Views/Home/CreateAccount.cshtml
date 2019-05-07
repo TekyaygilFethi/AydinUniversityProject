@@ -8,7 +8,7 @@
 <h2>CreateAccount</h2>
 @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
 @*@using (Ajax.BeginForm("", "api/AccountApi/CreateAccount",FormMethod.Post))*@
-@using (Ajax.BeginForm("", "api/Account/CreateAccount", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AccountCreationSuccess()", OnFailure = "AccountCreationFailure(xhr, status, error)" }))
+@using (Ajax.BeginForm("CreateAccount", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AccountCreationSuccess()", OnFailure = "AccountCreationFailure(xhr, status, error)" }))
 {
     @Html.AntiForgeryToken()
 

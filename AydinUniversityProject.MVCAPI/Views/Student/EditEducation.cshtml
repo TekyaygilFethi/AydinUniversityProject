@@ -12,10 +12,10 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @foreach (var item in Model.Notes)//değişiklik buradan başladı
     {
-        using (Ajax.BeginForm("", "api/Education/EditNote", new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();", OnFailure = "alert(xhr.responseJSON);" }))
+        using (Ajax.BeginForm("EditNote", "Education", new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();", OnFailure = "alert(xhr.responseJSON);" }))
         {
             @Html.AntiForgeryToken()
-            @Ajax.ActionLink("Delete This Note", "", "api/Education/DeleteNote", new { ID = item.ID }, new AjaxOptions { HttpMethod = "DELETE", Confirm = "Are you sure you want to delete " + item.Description + " for the " + Model.Lesson.Name + " lesson?" })
+            @Ajax.ActionLink("Delete This Note", "DeleteNote", "Education", new { ID = item.ID }, new AjaxOptions { HttpMethod = "DELETE", Confirm = "Are you sure you want to delete " + item.Description + " for the " + Model.Lesson.Name + " lesson?" })
 
             <div class="form-group">
                 <div class="col-md-10">

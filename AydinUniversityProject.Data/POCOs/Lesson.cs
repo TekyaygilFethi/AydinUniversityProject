@@ -26,7 +26,7 @@ namespace AydinUniversityProject.Data.POCOs
         public virtual List<Connection> Connections { get; set; }
 
         public virtual List<Topic> Topics { get; set; }
-
+        
         public virtual List<Post> Posts { get; set; }
 
         [ForeignKey("PeriodID")]

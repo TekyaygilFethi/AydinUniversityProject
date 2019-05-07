@@ -77,6 +77,10 @@
     <Compile Include="Migrations\201904261316489_AddSortOrder2.Designer.cs">
       <DependentUpon>201904261316489_AddSortOrder2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905030657249_Mig1.cs" />
+    <Compile Include="Migrations\201905030657249_Mig1.Designer.cs">
+      <DependentUpon>201905030657249_Mig1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904261316489_AddSortOrder2.resx">
       <DependentUpon>201904261316489_AddSortOrder2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905030657249_Mig1.resx">
+      <DependentUpon>201905030657249_Mig1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

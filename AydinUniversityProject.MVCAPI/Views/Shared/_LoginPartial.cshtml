@@ -7,7 +7,7 @@
                 <li>
                     <div class="row">
                         <div class="col-md-12">
-                            @using (Ajax.BeginForm("", "api/Account/Login", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "LoginSuccess", OnFailure = "LoginFailure(xhr, status, error)" }, new { htmlAttributes = new { @class = "form" }, id = "login-nav" }))
+                            @using (Ajax.BeginForm("Login", "Home", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "window.location.reload();", OnFailure = "LoginFailure(xhr, status, error)" }, new { htmlAttributes = new { @class = "form" }, id = "login-nav" }))
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="form-group">
@@ -35,7 +35,7 @@
     }
     else
     {
-        var user = (AydinUniversityProject.Data.POCOs.User)HttpContext.Current.Session["User"];
+        var user = ((AydinUniversityProject.Data.POCOs.Student)(HttpContext.Current.Session["Student"])).User;
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Welcome @user.Student.NameSurname</b> <span class="caret"></span></a>
             <ul id="login-dp" class="dropdown-menu" style="width:100px">
@@ -48,7 +48,7 @@
                                     <button id="btnProfile" class="btn btn-primary" style="width:130px; margin:0px 10px 0px 10px">Profile</button>
                                 </div>
                             }
-                            @using (Ajax.BeginForm("", "api/Account/LogOff", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "LogOffSuccess", OnFailure = "LogoffFailure(xhr, status, error)" }, new { htmlAttributes = new { @class = "form" } }))
+                            @using (Ajax.BeginForm("LogOff", "Home", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "LogOffSuccess", OnFailure = "LogoffFailure(xhr, status, error)" }, new { htmlAttributes = new { @class = "form" } }))
                             {
                                 <div class="form-group">
                                     <input type="hidden" value="@user.ID" id="UserID" name="UserID">
@@ -79,10 +79,11 @@
             url: '@Url.Action("Login","Home")'+'?response='+response,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (res) { window.location.reload(); },
+            success: function (res) {
+                if (res.IsSuccess) { window.location.reload(); } else { alert(res.Error); }
+            },
             error: function (xhr, status, error) { alert(error); }
         });
-        //window.location.href = '@Url.Action("Login","Home")' + '/' + JSON.stringify(Student);
     }
     function LogOffSuccess() {
             $.ajax({
@@ -96,3 +97,4 @@
         }
 
 </script>
+    

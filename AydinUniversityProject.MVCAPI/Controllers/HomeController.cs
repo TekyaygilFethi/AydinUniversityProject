@@ -1,14 +1,14 @@
-﻿using AydinUniversityProject.Data.Business.AccountComplexManagerData;
-using AydinUniversityProject.Data.POCOs;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers;
+using AydinUniversityProject.Data.Business.AccountComplexManagerData;
 using System.Web.Mvc;
 
 namespace AydinUniversityProject.MVCAPI.Controllers
 {
+    
     public class HomeController : Controller
     {
+        private static AccountComplexManager accountManager = new AccountComplexManager();
+
         public ActionResult Index()
         {
             return View();
@@ -20,32 +20,44 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Login(int response)
+        public JsonResult CreateAccount(CreateAccountFormData newAccountInfo)
         {
-            string apiUrl = Url.Action("", "api/Account/GetUser", null, Request.Url.Scheme);
-            apiUrl += "?userID="+response;
-            User data = null;
-            using (HttpClient client = new HttpClient())
+            if (ModelState.IsValid)
             {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                var response = accountManager.CreateAccount(newAccountInfo);
 
-                HttpResponseMessage res = await client.GetAsync(apiUrl);
-                if (res.IsSuccessStatusCode)
-                {
-                    //var stream = await httpClient.GetStreamAsync(url);
-                    //stream.CopyToAsync(fileStream)
-                    data = await res.Content.ReadAsAsync<User>();
-                    //lessons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lesson>>(data);
-                }
+                if (response.IsSuccess)
+                    return Json(new { IsSuccess=true});
+
+                else
+                    return Json(new { IsSuccess = false,Error= response.Explanation });
             }
+            else
+            {
+                string message = string.Empty;
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        message += error.ErrorMessage + "\n";
+                    }
+                }
+                return Json(new { IsSuccess = false, Error = message });
+            }
+        }
 
+        [HttpPost]
+        public JsonResult Login(LoginFormData lgnData)
+        {
+            var response = accountManager.Login(lgnData);
+            Session["Student"] = accountManager.GetStudent(response.ID);
+            if (response.TransactionObject.IsSuccess)
+            {
+                return Json(new { IsSuccess = true });
+            }
+            else
+                return Json(new { IsSuccess = false, Error = response.TransactionObject.Explanation });
 
-            Session["Student"] = response;
-            Session["User"] = data;
-            
-            return Json(new { IsSuccess=true});
         }
 
         [HttpPost]

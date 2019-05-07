@@ -3,9 +3,9 @@
 <head>
     @{
         bool IsAdmin = false;
-        if (Session["User"] != null)
+        if (Session["Student"] != null)
         {
-            IsAdmin = ((AydinUniversityProject.Data.POCOs.User)Session["User"]).IsAdmin;
+            IsAdmin = ((AydinUniversityProject.Data.POCOs.Student)Session["Student"]).User.IsAdmin;
         }
     }
     <meta charset="utf-8" />
@@ -80,16 +80,14 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
     @RenderSection("Scripts", required: false)
-</body>
-</html>
 
-<script type="text/javascript">
+    <script type="text/javascript">
     $(function () {
         var usernames;
 
         $.when($.ajax({
             method: "GET",
-            url: '@Url.Action("","api/Account/GetAllUsernames")',
+            url: '@Url.Action("GetAllUsernames", "User")',
             success: function (usernameList) {
                 usernames = usernameList;
             }
@@ -109,7 +107,7 @@
             var userID;
             $.ajax({
                 method: "GET",
-                url: '@Url.Action("", "api/Account/GetIDByUsername")',
+                url: '@Url.Action("GetIDByUsername", "User")',
                 data:{username:username},
                 success: function (ID) {
                     userID = ID;
@@ -122,4 +120,6 @@
 
     });
 
-</script>
+    </script>
+</body>
+</html>

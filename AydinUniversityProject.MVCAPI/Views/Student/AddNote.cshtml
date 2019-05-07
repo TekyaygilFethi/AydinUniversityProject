@@ -1,5 +1,5 @@
 ﻿
-@using (Ajax.BeginForm("", "api/Education/AddLesson", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AddSuccess", OnFailure = "AddFailed(xhr,status,error)" }))
+@using (Ajax.BeginForm("AddLesson", "Student", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AddSuccess", OnFailure = "AddFailed(xhr,status,error)" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">

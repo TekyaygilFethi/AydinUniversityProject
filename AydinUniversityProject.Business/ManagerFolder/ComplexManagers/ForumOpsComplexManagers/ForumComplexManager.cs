@@ -137,6 +137,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ForumOps
                     ff = new FavouriteFeeds();
                     ff.User = currentUser;
                     currentUser.FavouriteFeeds = ff;
+                    favFeedManager.AddFavouriteFeed(ff);
                 }
 
                 if (CheckExistence<Topic>(ff.FavouriteTopics, favTopic))
@@ -178,6 +179,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ForumOps
                     ff = new FavouriteFeeds();
                     ff.User = currentUser;
                     currentUser.FavouriteFeeds = ff;
+                    favFeedManager.AddFavouriteFeed(ff);
                 }
 
                 if (CheckExistence(ff.FavouritePosts, favPost))
@@ -293,6 +295,48 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ForumOps
                 response.IsSuccess = false;
                 response.Explanation = base.GetExceptionMessage(ex);
             }
+            return response;
+        }
+
+        public TransactionObject SendPost(int topicID, int userID, string postContent)
+        {
+            TransactionObject response = new TransactionObject();
+            try
+            {
+                Topic currentTopic = topicManager.GetTopic(topicID);
+                User currentUser = userManager.GetUser(userID);
+
+                SentFeeds sf = currentUser.SentFeeds;
+
+                if (sf == null)
+                {
+                    sf = new SentFeeds();
+                    sf.User = currentUser;
+                    currentUser.SentFeeds = sf;
+                    sentFeedManager.AddSentFeed(sf);
+                }
+                Post newPost = new Post();
+                newPost.Topic = currentTopic;
+                newPost.PostDate = DateTime.Now;
+                newPost.Content = postContent;
+                newPost.SentFeed = sf;
+                newPost.Lesson = currentTopic.Lesson;
+                currentTopic.Lesson.Posts.Add(newPost);
+
+                currentTopic.Posts.Add(newPost);
+                currentUser.SentFeeds.SentPosts.Add(newPost);
+
+                postManager.AddPost(newPost);
+                uow.Save();
+
+
+                response.IsSuccess = true;
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Explanation = ex.Message;
+            }
+            
             return response;
         }
     }

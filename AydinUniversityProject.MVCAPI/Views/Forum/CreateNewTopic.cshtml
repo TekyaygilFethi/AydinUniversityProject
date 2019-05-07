@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_ForumSharedLayout.cshtml";
 
     string LessonName = string.Empty;
-    int userID = (int)TempData["UserID"];
+    int userID = ((AydinUniversityProject.Data.POCOs.Student)Session["Student"]).ID;
 }
 @section SubStyles{
     <link href="~/Content/imgur/imgur.min.css" rel="stylesheet" />
@@ -94,13 +94,17 @@
             var userID = $('#UserID').val();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("","api/Forum/CreateNewTopic")',
+                url: '@Url.Action("CreateNewTopic","Forum")',
                 dataType: 'json',
                 data: { TopicName: topicName, Content: post, LessonID: lessonID,UserID:userID },
                 success: function (response) {
-                    var url = '@Url.Action("TopicPosts", "Forum")';
-                    url += '?ID=' + response;
-                    window.location.href = url;
+                    if (response.IsSuccess == true) {
+                        var url = '@Url.Action("TopicPosts", "Forum")';
+                        url += '?ID=' + response.ID;
+                        window.location.href = url;
+                    }
+                    else
+                        alert(response.Error);
                 }, error: function (xhr, error, status) {
                     alert(xhr.responseJSON);
                 }

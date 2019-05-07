@@ -4,24 +4,19 @@
     Layout = "../Shared/_Layout.cshtml";
 
     int studentID = 0;
-
-
-    if (Session["Student"] != null)
+    AydinUniversityProject.Data.POCOs.Student student = (AydinUniversityProject.Data.POCOs.Student)Session["Student"];
+    int sentTopicCount = 0;
+    int sentPostsCount = 0;
+    int favTopicCount = 0;
+    int favPostCount = 0;
+    if (student != null)
     {
-        studentID = (int)Session["Student"];
+         sentTopicCount = student.User.SentFeeds == null ? 0 :  student.User.SentFeeds.SentTopics.Count;
+         sentPostsCount = student.User.SentFeeds == null ? 0 :  student.User.SentFeeds.SentPosts.Count;
+         favTopicCount = student.User.FavouriteFeeds == null ? 0 : student.User.FavouriteFeeds.FavouriteTopics.Count;
+         favPostCount = student.User.FavouriteFeeds == null ? 0 : student.User.FavouriteFeeds.FavouritePosts.Count;
     }
 
-    //    if ((Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.SentFeeds != null)
-    //    {
-    //        topicCount = (Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.SentFeeds.SentTopics.Count;
-    //        postCount = (Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.SentFeeds.SentPosts.Count;
-    //    }
-    //    if ((Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.FavouriteFeeds != null)
-    //    {
-    //        favTopicCount = (Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.FavouriteFeeds.FavouriteTopics.Count;
-    //        favPostCount = (Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.FavouriteFeeds.FavouritePosts.Count;
-    //    }
-    //}
 }
 
 <html>
@@ -67,7 +62,7 @@
                             &ensp;
                             <a href=@Url.Action("SentTopicList", "Forum") class="btn btn-primary">
                                 <div align="center">
-                                    <b><font face="Georgia">Your Topics</font>&ensp;<span class="badge" id="sentTopicCount">0 </span></b>
+                                    <b><font face="Georgia">Your Topics</font>&ensp;<span class="badge" id="sentTopicCount">@sentTopicCount </span></b>
                                 </div>
                             </a>
                         </div>
@@ -76,7 +71,7 @@
                     <div class="col-sm-2">
                         <a href=@Url.Action("SentPostList", "Forum") class="btn btn-primary">
                             <div align="center">
-                                <b><font face="Georgia">Your Posts</font>&ensp;<span class="badge" id="sentPostCount">0 </span></b>
+                                <b><font face="Georgia">Your Posts</font>&ensp;<span class="badge" id="sentPostCount">@sentPostsCount </span></b>
                             </div>
                         </a>
                     </div>
@@ -86,7 +81,7 @@
                             &ensp;
                             <a href=@Url.Action("FavTopicList", "Forum") class="btn btn-success">
                                 <div align="center">
-                                    <b><font face="Georgia">Your Favourite Topics</font>&ensp;<span class="badge" id="favTopicCount">0 </span></b>
+                                    <b><font face="Georgia">Your Favourite Topics</font>&ensp;<span class="badge" id="favTopicCount">@favTopicCount</span></b>
                                 </div>
                             </a>
                         </div>
@@ -94,7 +89,7 @@
                     <div class="col-sm-3">
                         <a href=@Url.Action("FavPostList", "Forum") class="btn btn-success">
                             <div align="right">
-                                <b><font face="Georgia">Your Favourite Posts</font>&ensp;<span class="badge" id="favPostCount">0 </span></b>
+                                <b><font face="Georgia">Your Favourite Posts</font>&ensp;<span class="badge" id="favPostCount">@favPostCount</span></b>
                             </div>
                         </a>
                     </div>
@@ -105,66 +100,9 @@
     <hr />
     <br />
     @RenderBody()
+
     @section Scripts{
-        @RenderSection("SubScripts", false)
-        <script>
-            $(function () {
-                url = '@Url.Action("","api/Forum/GetPostCountOfStudent")';
-                url += '?ID=' + $('#studentID').val();
-
-                $.ajax({
-                    method: "GET",
-                    url: url,
-                    success: function (res) {
-                        $('#sentPostCount').text(res);
-                    }
-                });
-
-                url = '@Url.Action("","api/Forum/GetTopicCountOfStudent")';
-                url += '?ID=' + $('#studentID').val();
-
-                $.ajax({
-                    method: "GET",
-                    url: url,
-                    success: function (res) {
-                        $('#sentTopicCount').text(res);
-                    }
-                });
-
-                url = '@Url.Action("","api/Forum/GetFavPostCountOfStudent")';
-                url += '?ID=' + $('#studentID').val();
-
-                $.ajax({
-                    method: "GET",
-                    url: url,
-                    success: function (res) {
-                        $('favPostCount').text(res);
-                    }
-                });
-
-                url = '@Url.Action("","api/Forum/GetFavTopicCountOfStudent")';
-                url += '?ID=' + $('#studentID').val();
-
-                $.ajax({
-                    method: "GET",
-                    url: url,
-                    success: function (res) {
-                        $('favTopicCount').text(res);
-                    }
-                });
-
-
-
-
-
-
-
-
-
-
-            });
-
-        </script>
+    @RenderSection("SubScripts",false)
     }
 </body>
 </html>

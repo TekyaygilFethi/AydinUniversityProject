@@ -1,62 +1,31 @@
-﻿using AydinUniversityProject.Data.Business.ForumComplexManager;
+﻿using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ForumOpsComplexManagers;
+using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentOpsComplexManagers;
+using AydinUniversityProject.Data.Business.ForumComplexManager;
 using AydinUniversityProject.Data.POCOs;
-using System;
+using AydinUniversityProject.MVCAPI.Filters;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AydinUniversityProject.MVCAPI.Controllers
 {
+    [GenericActionFilter]
     public class ForumController : Controller
     {
-        static int TopicIDCNT = 0;
+        private static int TopicIDCNT = 0;
+        private static ForumComplexManager forumComplexManager = new ForumComplexManager();
+        private static EducationOpsComplexManager educationComplexManager = new EducationOpsComplexManager();
         // GET: Forum
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            string apiUrl = Url.Action("", "api/Education/GetAllLessons", null, Request.Url.Scheme);
-            List<Lesson> data = null;
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            List<Lesson> lessons = educationComplexManager.GetAllLessons();
 
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    //var stream = await httpClient.GetStreamAsync(url);
-                    //stream.CopyToAsync(fileStream)
-                     data = await response.Content.ReadAsAsync<List<Lesson>>();
-                    //lessons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lesson>>(data);
-                }
-            }
-            return View(data);
+            return View(lessons);
         }
 
-        public async Task<ActionResult> LessonTopics(int ID, int? page, int? anchoredPostID)
+        public ActionResult LessonTopics(int ID, int? page, int? anchoredPostID)
         {
-
-            string apiUrl = Url.Action("", "api/Forum/GetLesson", null, Request.Url.Scheme);
-            apiUrl += "?ID=" + ID;
-            Lesson lesson = null;
-
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var data = await response.Content.ReadAsStringAsync();
-                    lesson = Newtonsoft.Json.JsonConvert.DeserializeObject<Lesson>(data);
-                }
-            }
-
-            //ForumDepartmentIDCNT = 0;
+            Lesson lesson = educationComplexManager.GetLesson(ID);
 
 
             int _page = page == null ? 0 : ((int)page - 1);
@@ -66,84 +35,40 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             TempData["Page"] = _page;
 
             return View(lesson);
-
-
-
         }
 
-        public async Task<ActionResult> TopicPosts(int ID, int? page, int? anchoredPostID)
+        public ActionResult TopicPosts(int ID, int? page, int? anchoredPostID)
         {
-            TopicIDCNT = ID;
-            string apiUrl = Url.Action("", "api/Forum/GetTopic", null, Request.Url.Scheme);
-            apiUrl += "?ID=" + ID;
-            List<ProfilePhotoFormData> ppfdList = new List<ProfilePhotoFormData>();
+            Topic topic = forumComplexManager.GetTopic(ID);
 
-            List<Post> posts = new List<Post>();
-            Topic topic = null;
+            User user = (Session["Student"] as Student).User;
 
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            ViewData["User"] = user;
 
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var data = await response.Content.ReadAsStringAsync();
-                    topic = Newtonsoft.Json.JsonConvert.DeserializeObject<Topic>(data);
-                }
-            }
-            posts = topic.Posts;
-
-            if (Session["Student"]!=null)
-            {
-                apiUrl = Url.Action("", "api/Account/GetUser", null, Request.Url.Scheme);
-                apiUrl += "?userID=" + (int)Session["Student"];
-
-                User user=null;
-
-                using (HttpClient client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(apiUrl);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var data = await response.Content.ReadAsStringAsync();
-                        user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(data);
-                    }
-                }
-                ViewData["User"] = user;
-            }
-
-            int _page = page == null ? 0 : ((int)page) - 1;
-
-            int fdID = (int)ID;
+            int _page = page == null ? 0 : page.Value - 1;
 
             TempData["Page"] = _page;
+            List<ProfilePhotoFormData> ppfdList = new List<ProfilePhotoFormData>();
 
             if (anchoredPostID != null)
             {
                 TempData["anchoredPostID"] = (int)anchoredPostID;
 
-                Post anchoredPost = posts.SingleOrDefault(w => w.ID == anchoredPostID);
+                Post anchoredPost = topic.Posts.SingleOrDefault(w => w.ID == anchoredPostID);
 
-                _page = posts.IndexOf(anchoredPost) % 15 == 0 ? posts.IndexOf(anchoredPost) / 15 : (posts.IndexOf(anchoredPost) / 15);
+                _page = topic.Posts.IndexOf(anchoredPost) % 15 == 0 ? topic.Posts.IndexOf(anchoredPost) / 15 : (topic.Posts.IndexOf(anchoredPost) / 15);
                 TempData["Page"] = _page;
 
             }
-            if (posts != null)
+            if (topic.Posts != null)
             {
-                foreach (var item in posts)
+                foreach (var item in topic.Posts)
                 {
                     if (ppfdList.SingleOrDefault(w => w.ID == item.SentFeed.User.ID) == null)
                     {
                         ProfilePhotoFormData ppfd = new ProfilePhotoFormData();
                         ppfd.ID = item.SentFeed.User.ID;
-                        ppfd.Base64Image = /*"data:image/png;base64," +*/ item.SentFeed.User.ProfilePhoto;
+                        ppfd.Base64Image = item.SentFeed.User.ProfilePhoto;
                         ppfdList.Add(ppfd);
                     }
                 }
@@ -154,27 +79,9 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             return View(tpfd);
         }
 
-        public async Task<ActionResult> CreateNewTopic()
+        public ActionResult CreateNewTopic()
         {
-            TempData["UserID"] = (int)Session["Student"];
-
-
-            string apiUrl = Url.Action("", "api/Education/GetAllLessons", null, Request.Url.Scheme);
-            List<Lesson> lessons = null;
-
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var data = await response.Content.ReadAsStringAsync();
-                    lessons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lesson>>(data);
-                }
-            }
+            List<Lesson> lessons = educationComplexManager.GetAllLessons();
 
             ViewData["Lessons"] = lessons.Select(a => new SelectListItem
             {
@@ -182,6 +89,76 @@ namespace AydinUniversityProject.MVCAPI.Controllers
                 Value = a.ID.ToString()
             });
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult CreateNewTopic(NewTopicFormData ntfd)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = forumComplexManager.CreateNewTopic(ntfd);
+                if (!(response.IsSuccess))
+                    return Json(new { IsSuccess = false, Error = response.Explanation });
+
+                return Json(new { IsSuccess = true, ID = int.Parse(response.Explanation) });
+            }
+            else
+            {
+                string message = string.Empty;
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        message += error.ErrorMessage + "\n";
+                    }
+                }
+                return Json(new { IsSuccess = false, Error = message });
+            }
+        }
+
+        public JsonResult DeleteTopic(int ID)
+        {
+            forumComplexManager.DeleteTopic(ID);
+
+            return Json(new { IsSuccess = true });
+        }
+
+        public JsonResult SendPost(int topicID, string postContent)
+        {
+            var response = forumComplexManager.SendPost(topicID, (Session["Student"] as Student).ID, postContent);
+
+            if (response.IsSuccess)
+                return Json(new { IsSuccess = true });
+            else
+                return Json(new { IsSuccess = false, Error = response.Explanation });
+        }
+
+        public JsonResult ToggleFavPost(GenericToggleFavFormData gtffd)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = forumComplexManager.ToggleFavPost(gtffd.contentID, gtffd.userID);
+                if (response.IsSuccess)
+                {
+                    return Json(new { IsSuccess = true, ID = gtffd.contentID },JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { IsSuccess = false, Error = response.Explanation }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                string message = string.Empty;
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        message += error.ErrorMessage + "\n";
+                    }
+                }
+                return Json(new { IsSuccess = false, Error = message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

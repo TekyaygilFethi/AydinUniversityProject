@@ -1,4 +1,5 @@
-﻿using AydinUniversityProject.Data.POCOs;
+﻿using AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers;
+using AydinUniversityProject.Data.POCOs;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -9,32 +10,17 @@ namespace AydinUniversityProject.MVCAPI.Controllers
 {
     public class UserController : Controller
     {
+        private static AccountComplexManager accountManager = new AccountComplexManager();
         // GET: User
-        public async Task<ActionResult> UserProfile(int ID)
+        public ActionResult UserProfile(int ID)
         {
-            string apiUrl = Url.Action("", "api/Account/GetStudent/", null, Request.Url.Scheme);
-            Student student = null;
+            Student student = Session["Student"] as Student;
+            
 
-            if (Session["Student"] != null && ID == (int)Session["Student"])
+            if (Session["Student"] != null && ID == ((Student)Session["Student"]).ID)
             {
                 TempData["IsLocalUser"] = true;
-
-                apiUrl +=  + (int)Session["Student"];
-                using (HttpClient client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(apiUrl);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var data = await response.Content.ReadAsStringAsync();
-                        student = Newtonsoft.Json.JsonConvert.DeserializeObject<Student>(data);
-                    }
-                }
-
-
+               
                 TempData["IsFavFeedNull"] = student.User.FavouriteFeeds == null;
                 TempData["IsSentFeedNull"] = student.User.SentFeeds == null;
                 //kendi profili
@@ -42,28 +28,12 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             else
             {
                 TempData["IsLocalUser"] = false;
-
-                apiUrl += "?ID=" + ID;
-                using (HttpClient client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(apiUrl);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var data = await response.Content.ReadAsStringAsync();
-                        student = Newtonsoft.Json.JsonConvert.DeserializeObject<Student>(data);
-                    }
-                }
+                student = accountManager.GetStudent(ID);
 
                 if (Session["Student"] != null)
                 {
                     TempData["IsLogged"] = true;
-                    
-                    
-                    
+                                        
                     TempData["IsSentRequest"] = student.User.SentFriendRequests.Any(w => w.RequestToID == ID && w.IsAccepted == false);
                     TempData["IsFriend"] = student.User.FriendRelationship.Friends.Any(w => w.ID == ID);
                 }
@@ -78,5 +48,16 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             }
             return View(student);
         }
+
+        public JsonResult GetAllUsernames()
+        {
+            return Json(accountManager.GetAllUsernames(),JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetIDByUsername(string username)
+        {
+            return Json(accountManager.GetUserIDByUsername(username),JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
