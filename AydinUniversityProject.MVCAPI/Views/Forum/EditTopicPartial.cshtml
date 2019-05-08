@@ -1,0 +1,35 @@
+﻿
+
+
+<input type="hidden" value="@TempData["TopicID"]" id="topicIdArea" />
+<textarea id="topicUpdateTextArea" style="min-width:73%;min-height:220px;resize:none" class="form-control">@TempData["Name"]</textarea>
+<br />
+<div class="btn btn-default" id="btnTopicUpdate">Update</div>
+<div class="btn btn-danger" id="btnTopicCancel">Cancel</div>
+
+<script>
+    $(function () {
+        $('#btnTopicUpdate').click(function () {
+            var topicName = $('#topicUpdateTextArea').val();
+            var topicID = $('#topicIdArea').val();
+
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("UpdateTopic","Forum")',
+                type: 'json',
+                data: { ID: topicID, topicName: topicName },
+                success: function () {
+                    window.location.reload();
+                }, error: function (xhr, status, error) {
+                    alert(xhr.responseJSON);
+                }
+
+            });
+        });
+
+        $('#btnTopicCancel').click(function () {
+            window.location.reload();
+        });
+
+        });
+</script>

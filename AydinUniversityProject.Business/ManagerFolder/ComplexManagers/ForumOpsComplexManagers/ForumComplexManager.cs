@@ -234,6 +234,28 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ForumOps
 
         }
 
+        public TransactionObject DeletePost(int ID)
+        {
+            TransactionObject response = new TransactionObject();
+
+            try
+            {
+                postManager.DeletePost(ID);
+
+                uow.Save();
+
+                response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Explanation = base.GetExceptionMessage(ex);
+            }
+
+            return response;
+
+        }
+
         public TransactionObject GetTopicCountOfStudent(int studentID)
         {
             TransactionObject response = new TransactionObject();
@@ -331,12 +353,52 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ForumOps
 
 
                 response.IsSuccess = true;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 response.IsSuccess = false;
                 response.Explanation = ex.Message;
             }
-            
+
+            return response;
+        }
+
+        public Post GetPost(int ID)
+        {
+            return postManager.GetPost(ID);
+        }
+
+        public TransactionObject UpdatePost(int ID, string content)
+        {
+            TransactionObject response = new TransactionObject();
+            try
+            {
+                postManager.UpdatePost(ID,content);                
+                uow.Save();
+                response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Explanation = base.GetExceptionMessage(ex);
+            }
+            return response;
+        }
+
+        public TransactionObject UpdateTopic(int ID,string name)
+        {
+            TransactionObject response = new TransactionObject();
+            try
+            {
+                topicManager.UpdateTopic(ID, name);
+                uow.Save();
+                response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Explanation = base.GetExceptionMessage(ex);
+            }
             return response;
         }
     }

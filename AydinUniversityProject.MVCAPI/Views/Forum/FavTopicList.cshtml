@@ -1,0 +1,55 @@
+﻿@model IEnumerable<AydinUniversity.Data.POCOs.Topic>
+@{
+    ViewBag.Title = "FavTopicList";
+    Layout = "~/Views/Shared/_ForumSharedLayout.cshtml";
+}
+<link href="~/Content/educationdetail-css.css" rel="stylesheet" />
+<h2>FavTopicList</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h2>Sent Posts</h2>
+            </div>
+            <hr>
+        </div>
+        @foreach (var topic in Model)
+        {
+            <a href='@Url.Action("TopicPosts","Forum",new { ID=topic.ID})'>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <strong>@topic.Name</strong> <div class="pull-right">@topic.Posts.OrderBy(o => o.PostDate).FirstOrDefault().PostDate</div>
+                                </h3>
+                                @*@Ajax.ActionLink("Delete This Lesson", "DeleteLesson", "Student", new { _scoreID = item.ID }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to delete this lesson?", OnSuccess = "(function(){window.location.reload();})" }, new { @class = "btn btn-danger" }) &emsp;&emsp; @Html.ActionLink("Edit This Lesson", "EditLesson", "Student", new { _lessonID = item.LessonID }) &emsp;&emsp;@Html.ActionLink("Add New Note", "AddNote", "Student", new { _scoreID = item.ID }, null) &emsp;&emsp; @Html.ActionLink("Edit Notes", "EditScore", "Student", new { _scoreID = item.ID }, null)*@
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <td><strong>POST COUNT</strong></td>
+                                                <td><strong>LAST POST</strong></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>@topic.Posts.Count</td>
+                                                <td>
+                                                    @topic.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault().PostDate - @topic.Posts.OrderByDescending(o => o.PostDate).FirstOrDefault().SentFeed.User.Username
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <br />
+        }
+    </div>
+</div>

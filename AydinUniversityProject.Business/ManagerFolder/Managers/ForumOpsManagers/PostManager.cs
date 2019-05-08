@@ -22,8 +22,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManager
         {
             return postRepository.GetBy(w => w.SentFeed.ID == studentID);
         }
-
-        
+               
 
         public List<Post> GetAllPosts()
         {
@@ -35,14 +34,15 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManager
             postRepository.Add(post);
         }
 
-        public void DeletePost(Post post)
+        public void DeletePost(int ID)
         {
-            postRepository.Delete(post);
+            postRepository.Delete(GetPost(ID));
         }
 
-        public void UpdatePost(Post post)
+        public void UpdatePost(int ID,string content)
         {
-            //postRepository.Update(post);
+            Post post = GetPost(ID);
+            post.Content = content;
         }
 
     }

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<AydinUniversityProject.Data.POCOs.Post>
+@{
+    ViewBag.Title = "SentPostList";
+    Layout = "~/Views/Shared/_ForumSharedLayout.cshtml";
+}
+
+<link href="~/Content/educationdetail-css.css" rel="stylesheet" />
+<h2>SentPostList</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h2>Sent Posts</h2>
+            </div>
+            <hr>
+        </div>
+        @foreach (var post in Model)
+        {
+            <a href=@Url.Action("TopicPosts","Forum",new { ID=post.TopicID, anchoredPostID =post.ID})>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <strong>@post.Topic.Name</strong>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed">
+                                        <tbody>
+                                            <tr>
+                                                <td>@Html.Raw(post.Content)</td>
+                                            </tr>
+                                            <tr>
+                                                @post.PostDate
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <br />
+        }
+    </div>
+</div>

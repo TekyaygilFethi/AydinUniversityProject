@@ -314,6 +314,12 @@
     <Content Include="Views\Forum\TopicPosts.cshtml" />
     <Content Include="Views\Forum\LessonTopics.cshtml" />
     <Content Include="Views\Forum\CreateNewTopic.cshtml" />
+    <Content Include="Views\Forum\SentPostList.cshtml" />
+    <Content Include="Views\Forum\SentTopicList.cshtml" />
+    <Content Include="Views\Forum\FavTopicList.cshtml" />
+    <Content Include="Views\Forum\FavPostList.cshtml" />
+    <Content Include="Views\Forum\EditPostPartial.cshtml" />
+    <Content Include="Views\Forum\EditTopicPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

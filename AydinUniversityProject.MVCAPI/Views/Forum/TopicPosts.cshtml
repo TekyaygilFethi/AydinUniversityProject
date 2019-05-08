@@ -14,36 +14,41 @@
 @section SubStyles{
     <link href="~/Content/imgur/imgur.min.css" rel="stylesheet" />
 }
-<h2>
-    @Model.Topic.Name
-    <div align="right">
 
-        @if (user != null && user.FavouriteFeeds != null)
-        {
-            if (!user.FavouriteFeeds.FavouriteTopics.Select(s => s.ID).Contains(Model.Topic.ID))
-            {
-                @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star-empty\" id=\"favStar\"></span></div>"), "ToggleFavTopic", "Forum", new { contentID = Model.Topic.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "ToggleSuccess", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
-            }
-            if (user.FavouriteFeeds.FavouriteTopics.Select(s => s.ID).Contains(Model.Topic.ID))
-            {
-                @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star\" id=\"favStar\"></span></div>"), "ToggleFavTopic", "Forum", new { contentID = Model.Topic.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "ToggleSuccess", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
-            }
-        }
-        @if (user != null && user.FavouriteFeeds == null)
-        {
-            <div class="btn btn-default" id="btnToggleFav"><span class="glyphicon glyphicon-star-empty" id="favStar"></span></div>
-        }
-    </div>
+<div id="topicArea">
+    <h2>
+    @Model.Topic.Name
 </h2>
+</div>
+<div align="right">
+    @if (user != null && user.FavouriteFeeds != null)
+    {
+        if (!user.FavouriteFeeds.FavouriteTopics.Select(s => s.ID).Contains(Model.Topic.ID))
+        {
+            @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star-empty\" id=\"favStar\"></span></div>"), "ToggleFavTopic", "Forum", new { contentID = Model.Topic.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "ToggleSuccess", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
+        }
+        if (user.FavouriteFeeds.FavouriteTopics.Select(s => s.ID).Contains(Model.Topic.ID))
+        {
+            @Ajax.RawActionLink(string.Format("<div class=\"btn btn-default\" id=\"btnToggleFav\"><span class=\"glyphicon glyphicon-star\" id=\"favStar\"></span></div>"), "ToggleFavTopic", "Forum", new { contentID = Model.Topic.ID, userID = userID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "ToggleSuccess", OnFailure = "ToggleFailure(xhr,error,status)" }, null)
+        }
+    }
+    @if (user != null && user.FavouriteFeeds == null)
+    {
+        <div class="btn btn-default" id="btnToggleFav"><span class="glyphicon glyphicon-star-empty" id="favStar"></span></div>
+    }
+</div>
+
 
 <input type="hidden" id="anchoredPostArea" value="@anchoredPostID" />
 
 @if (user != null && user.SentFeeds != null)
 {
-    if (user.SentFeeds.SentTopics.Contains(Model.Topic))
+    if (user.SentFeeds.SentTopics.Select(s => s.ID).Contains(Model.Topic.ID))
     {
         <div align="right">
+            @Ajax.ActionLink("Edit Topic |", "EditTopicPartial", new { ID = Model.Topic.ID }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "topicArea" })
             @Ajax.ActionLink("Delete This Topic", "DeleteTopic", "Forum", new { ID = Model.Topic.ID }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to delete this topic?", OnSuccess = "window.location.href='" + Url.Action("Index", "Forum") + "';", OnFailure = "alert('Error occured!');" })
+
         </div>
     }
 }

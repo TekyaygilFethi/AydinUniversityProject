@@ -38,9 +38,10 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ForumOpsManager
             topicRepository.Delete(GetTopic(ID));
         }
 
-        public void UpdateTopic(Topic topic)
+        public void UpdateTopic(int ID, string name)
         {
-            //topicRepository.Update(topic);
+            Topic topic = GetTopic(ID);
+            topic.Name = name;
         }
     }
 }
