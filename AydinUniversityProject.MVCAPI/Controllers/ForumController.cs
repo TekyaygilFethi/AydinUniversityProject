@@ -133,6 +133,7 @@ namespace AydinUniversityProject.MVCAPI.Controllers
                 return Json(new { IsSuccess = false, Error = response.Explanation });
         }
 
+        #region ToggleFavs
         public JsonResult ToggleFavPost(GenericToggleFavFormData gtffd)
         {
             if (ModelState.IsValid)
@@ -188,6 +189,7 @@ namespace AydinUniversityProject.MVCAPI.Controllers
                 return Json(new { IsSuccess = true, Error = message }, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
 
         #region Sent and Fav Feed
         //[UserAuthorizationFilter]

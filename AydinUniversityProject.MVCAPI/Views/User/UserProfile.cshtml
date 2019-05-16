@@ -67,7 +67,7 @@
                                     <span class="glyphicon glyphicon-facetime-video"></span>&ensp; @connection.ConnectionName @*<div class="pull-right">@connection.ConnectionDate.ToShortDateString()</div>*@
                                 </div>
                                 <div class="panel-body">
-                                    with @connection.ViewerID!=@Model.ID ? @connection.Viewer?.Username : @connection.Sharer?.Username
+                                    with @(connection.ViewerID!=Model.ID ? connection.Viewer.Username : connection.Sharer.Username)
                                     @if (connection.ConnectionDuration.TotalMinutes < 1)
                                     {
                                         <div class="pull-right">

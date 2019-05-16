@@ -14,7 +14,7 @@ namespace AydinUniversityProject.Data.Business.AccountComplexManagerData
         [MaxLength(30, ErrorMessage = "Surname can not exceed 30 characters!")]
         public string Surname { get; set; }
 
-        [DataType(DataType.EmailAddress)]
+        [DataType(DataType.DateTime)]
         public DateTime Birthday { get; set; }
 
         [Required]

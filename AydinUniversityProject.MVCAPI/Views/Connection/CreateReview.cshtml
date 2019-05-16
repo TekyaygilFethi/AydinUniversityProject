@@ -1,0 +1,59 @@
+﻿@model AydinUniversityProject.Data.POCOs.Connection
+@{
+    ViewBag.Title = "CreateReview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<br />
+<br />
+<br />
+@Model.ConnectionName Reviews
+
+<input type="hidden" value="@Model.ID" id="modelID" />
+<div class="input-group">
+    <div class="col-xs-5">
+        <input class="form-control" name="group100" type="radio" value="upvote" id="upvote">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-thumbs-up"></span></span>
+        @*<label class="form-control" for="radio100" ><span class="glyphicon glyphicon-thumbs-up"></span></label>*@
+    </div>
+
+    <div class="col-xs-2"></div>
+    <div class="col-xs-5">
+        <input class="form-control" name="group100" type="radio" id="downvote" value="downvote" checked>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-thumbs-down"></span></span>
+        @*<label class="form-control" for="radio101"><span class="glyphicon glyphicon-thumbs-down"></span></label>*@
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label for="comment">REVIEW:</label>
+    <textarea class="form-control" rows="8" id="reviewArea" style="resize:none;min-width:100%;"></textarea>
+</div>
+<div class="btn btn-danger" id="btnSendReview">SEND REVIEW</div>
+
+@section Scripts{
+    <script>
+
+    $(function () {
+        $('#btnSendReview').click(function () {
+            var ID = $('#modelID').val();
+            var review=$('#reviewArea').val();
+            var radioVote=$('input[name=group100]:checked').val();
+
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("CreateReview","Connection")',
+                data: { ID: ID, review: review,vote:radioVote },
+                success: function () {
+                    var link='@Url.Action("ConnectionDetails",new { ID=0})' ;
+                    link=link.replace('/0','/'+ID);
+                    window.location.href =link;
+                }
+            });
+        });
+    });
+
+    </script>
+}

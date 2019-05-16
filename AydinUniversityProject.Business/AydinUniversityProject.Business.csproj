@@ -37,6 +37,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FakeData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeData.1.0.0\lib\FakeData.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
     </Reference>
@@ -61,6 +64,7 @@
     <Compile Include="ManagerFolder\BaseManagers\MotherBases\MotherBaseManager.cs" />
     <Compile Include="ManagerFolder\BaseManagers\ComplexManagersBases\IBaseComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\ForumOpsComplexManagers\ForumComplexManager.cs" />
+    <Compile Include="ManagerFolder\ComplexManagers\ScreenShareOpsComplexManagers\ScreenShareOpsComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\StudentOpsComplexManagers\EducationOpsComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\UserOpsComplexManagers\AccountComplexManager.cs" />
     <Compile Include="ManagerFolder\ComplexManagers\UserOpsComplexManagers\FriendRequestsComplexManagers.cs" />
@@ -76,6 +80,8 @@
     <Compile Include="ManagerFolder\Managers\EducationOpsManagers\LessonManager.cs" />
     <Compile Include="ManagerFolder\Managers\FriendOpsManagers\MessageManager.cs" />
     <Compile Include="ManagerFolder\Managers\ForumOpsManagers\PostManager.cs" />
+    <Compile Include="ManagerFolder\Managers\ScreenShareOpsManagers\ReviewManager.cs" />
+    <Compile Include="ManagerFolder\Managers\ScreenShareOpsManagers\ScreenShareManager.cs" />
     <Compile Include="ManagerFolder\Managers\UserOpsManagers\StudentManager.cs" />
     <Compile Include="ManagerFolder\Managers\ForumOpsManagers\TopicManager.cs" />
     <Compile Include="ManagerFolder\Managers\UserOpsManagers\UserManager.cs" />
@@ -103,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ClassDiagrams\" />
-    <Folder Include="NinjectFolder\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

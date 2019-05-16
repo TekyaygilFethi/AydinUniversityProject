@@ -62,6 +62,8 @@
     <Compile Include="Business\ForumComplexManager\ProfilePhotoFormData.cs" />
     <Compile Include="Business\ForumComplexManager\TopicPageFormData.cs" />
     <Compile Include="Business\FriendRequestsComplexManagerData\AllFriendRequestsResponseObject.cs" />
+    <Compile Include="Business\ScreenShareComplexManagerData\ConnectionDetailsFormData.cs" />
+    <Compile Include="Business\ScreenShareComplexManagerData\ConnectionEditFormData.cs" />
     <Compile Include="Business\TransactionObject.cs" />
     <Compile Include="POCOs\Connection.cs" />
     <Compile Include="POCOs\Contact.cs" />

@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace AydinUniversityProject.Data.POCOs
 {
+    public enum IPType
+    {
+        Sharer,
+        Viewer
+    }
+
     [Table("ConnectionTable")]
     public class Connection
     {

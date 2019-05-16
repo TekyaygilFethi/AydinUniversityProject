@@ -1,6 +1,8 @@
-﻿using AydinUniversityProject.Business.ManagerFolder.BaseManagers.ManagerBases;
-using AydinUniversityProject.Business.RepositoryFolder;
+﻿using AydinUniversityProject.Business.RepositoryFolder;
 using AydinUniversityProject.Data.POCOs;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace AydinUniversityProject.Business.ManagerFolder.Managers.ScreenShareOpsManagers
 {
@@ -27,10 +29,16 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.ScreenShareOpsM
         {
             return connectionRepository.GetByID(ID);
         }
+              
 
         public void DeleteConnection(Connection connection)
         {
             connectionRepository.Delete(connection);
+        }
+
+        public List<Connection> GetConnectionBy(Expression<Func<Connection, bool>> expression)
+        {
+            return connectionRepository.GetBy(expression);
         }
     }
 }

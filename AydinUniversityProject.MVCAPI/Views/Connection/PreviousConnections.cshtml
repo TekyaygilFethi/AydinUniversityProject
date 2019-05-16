@@ -1,0 +1,57 @@
+﻿@model IEnumerable<AydinUniversityProject.Data.POCOs.Connection>
+@{
+    ViewBag.Title = "PreviousConnections";
+}
+<h2>Previous Connections</h2>
+@if (Model.Count() != 0)
+{
+    <table class="table">
+        <tr>
+            <th>
+                Viewer
+            </th>
+            <th>
+                Sharer
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConnectionName)
+            </th>
+            <th>
+                Reviews
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Viewer.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sharer.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConnectionName)
+                </td>
+                <td>
+                    @item.Reviews.Count
+                </td>
+                <td>
+                    Connect again as :
+                    @Ajax.ActionLink("Connect Again As Sharer", "EstablishPreviousConnection", new { ID = item.ID, status = "Sharer" }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to make this connection again as sharer? (Other user will be notified once the desktop application is opened!)", OnFailure = "alert('You already have an existing pending connection!');" }) |
+                    @Ajax.ActionLink("Connect Again As Viewer", "EstablishPreviousConnection", new { ID = item.ID, status = "Viewer" }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to make this connection again as sharer? (Other user will be notified once the desktop application is opened!)", OnFailure = "alert('You already have an existing pending connection!');" }) |
+                </td>
+                <td>
+                    @Html.ActionLink("Add Review!", "CreateReview", new { ID = item.ID })
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "ConnectionDetails", new { ID = item.ID })
+                </td>
+            </tr>
+        }
+    </table>
+}
+@if (Model.Count() == 0)
+{
+    <h1>You have no previous connections!</h1>
+}

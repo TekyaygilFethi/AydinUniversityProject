@@ -1,7 +1,11 @@
-﻿using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentOpsComplexManagers;
+﻿using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.ScreenShareOpsComplexManagers;
+using AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentOpsComplexManagers;
 using AydinUniversityProject.Data.Business;
 using AydinUniversityProject.Data.Business.EducationComplexManagerData;
+using AydinUniversityProject.Data.POCOs;
 using AydinUniversityProject.MVCAPI.Filters;
+using Newtonsoft.Json;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace AydinUniversityProject.MVCAPI.Controllers
@@ -10,11 +14,11 @@ namespace AydinUniversityProject.MVCAPI.Controllers
     public class StudentController : Controller
     {
         private static EducationOpsComplexManager educationComplexManager = new EducationOpsComplexManager();
-
+        private static ScreenShareOpsComplexManager screenShareComplexManager = new ScreenShareOpsComplexManager();
         // GET: Student
         public ActionResult AddNote()
         {
-            TempData["StudentID"] = (int)Session["Student"];
+            TempData["StudentID"] = ((Student)Session["Student"]).ID;
             return View();
         }
 
@@ -47,7 +51,7 @@ namespace AydinUniversityProject.MVCAPI.Controllers
 
         public ActionResult ListEducations()
         {
-            TempData["StudentID"] = (int)Session["Student"];
+            TempData["StudentID"] = ((Student)Session["Student"]).ID;
             return View();
         }
 
@@ -98,5 +102,36 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         {
             return Json(educationComplexManager.GetEducation(ID),JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetLessons(int Year,int Term)
+        {
+            var result = JsonConvert.SerializeObject(educationComplexManager.GetLessonsOfTerm(Year, Term), Formatting.Indented,
+                           new JsonSerializerSettings
+                           {
+                               ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                           });
+
+            return Json(result,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ConnectAsSharer()
+        {
+            int userID = (Session["Student"] as Student).ID;
+            screenShareComplexManager.ConnectAsSharer(userID);
+
+            return  Json(new { Success=true});
+        }
+
+        [HttpPost]
+        public JsonResult ConnectAsViewer()
+        {
+            int userID = (Session["Student"] as Student).ID;
+
+            screenShareComplexManager.ConnectAsViewer(userID);
+
+            return  Json(new { Success = true });
+        }
+
     }
 }

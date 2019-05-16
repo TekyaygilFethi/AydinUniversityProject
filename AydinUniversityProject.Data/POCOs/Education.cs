@@ -28,9 +28,6 @@ namespace AydinUniversityProject.Data.POCOs
 
         public int LessonID { get; set; }
 
-        [NotMapped]
-        public double avg;
-
         public double Average { get; set; }
     }
 }

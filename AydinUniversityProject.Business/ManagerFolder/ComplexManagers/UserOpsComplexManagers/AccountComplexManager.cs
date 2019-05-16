@@ -17,6 +17,7 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
         StudentManager stdManager;
         PeriodManager prdManager;
         FriendRelationshipManager frManager;
+
         IUnitOfWork uow;
         
         public AccountComplexManager()
@@ -43,7 +44,7 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
 
                     newUser.Username = newAccountInfo.Username;
                     newUser.CreationDate = DateTime.Now;
-                    newUser.Password = SecurityFolder.Security.GetEncryptedPassword(newAccountInfo.Password);
+                    newUser.Password = SecurityFolder.Security.GetEncryptedPassword(newAccountInfo.Password);//şifre hashlendi
                     newUser.ProfilePhoto = newAccountInfo.ProfilePhoto;
                     newUser.Email = newAccountInfo.Email;
                     
@@ -93,9 +94,9 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
             return response;
         }
 
-        public LoginResponseObject Login(LoginFormData lgn)
+        public LoginResponseObject Login(LoginFormData lgn,bool IsDesktop=false)
         {
-            TransactionObject loginResponse = userManager.CheckCreedientals(lgn.Username, lgn.Password);
+            TransactionObject loginResponse = CheckCreedientals(lgn);
             LoginResponseObject response = new LoginResponseObject
             {
                 TransactionObject = loginResponse
@@ -104,16 +105,47 @@ namespace AydinUniversityProject.Business.ComplexManagers.UserOpsComplexManagers
             if (loginResponse.IsSuccess)
             {
                 User currentUser = userManager.GetUserByUsername(lgn.Username);
-                SetOnlineStatus(userManager.GetUser(currentUser.ID), true);
+                SetOnlineStatus(userManager.GetUser(currentUser.ID), true,IsDesktop);
+                
                 uow.Save();
                 response.ID = currentUser.ID;
             }
             return response;
         }
 
-        public User SetOnlineStatus(User user, bool IsOnline)
+        public TransactionObject CheckCreedientals(LoginFormData lgn)
+        {
+            TransactionObject response = new TransactionObject();
+            User user = userManager.GetUserByUsername(lgn.Username);
+
+            if (user == null)
+            {
+                response.IsSuccess = false;
+                response.Explanation = "Username is invalid!";
+            }
+            else
+            {
+                if (SecurityFolder.Security.VerifyPassword(user.Password, lgn.Password))
+                {
+                    response.IsSuccess = true;
+                    response.Explanation = user.ID.ToString();
+                }
+
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Explanation = "Password is invalid!";
+                }
+            }
+            return response;
+        }
+
+        public User SetOnlineStatus(User user, bool IsOnline,bool IsDesktop=false)
         {
             user.IsOnline = IsOnline;
+            if (IsDesktop)
+                user.IsLoginToDesktop = true;
+
             uow.Save();
             return user;
         }

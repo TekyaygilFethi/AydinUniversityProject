@@ -95,7 +95,7 @@
 
             $.ajax({
                     type: 'GET',
-                    url: '@Url.Action("","api/Education/GetLessons")',
+                    url: '@Url.Action("GetLessons", "Student")',
                     dataType: 'json',
                     data: { Year: 1,Term:1 },
                     success: function (lessons) {
@@ -113,7 +113,7 @@
                 
                 $.ajax({
                     type: 'GET',
-                    url: '@Url.Action("","api/Education/GetLessons")',
+                    url: '@Url.Action("GetLessons", "Student")',
                     dataType: 'json',
                     data: { Year: $("#Year").val(),Term:$('#Term').val() },
                     success: function (lessons) {
@@ -134,7 +134,7 @@
 
                 $.ajax({
                     type: 'GET',
-                    url: '@Url.Action("","api/Education/GetLessons")',
+                    url: '@Url.Action("GetLessons", "Student")',
                     dataType: 'json',
                     data: { Year: $("#Year").val(), Term: $('#Term').val() },
                     success: function (lessons) {

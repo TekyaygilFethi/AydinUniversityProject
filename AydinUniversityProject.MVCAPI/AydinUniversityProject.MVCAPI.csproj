@@ -195,6 +195,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountApiController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\EducationApiController.cs" />
     <Compile Include="Controllers\ForumApiController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
@@ -320,6 +321,14 @@
     <Content Include="Views\Forum\FavPostList.cshtml" />
     <Content Include="Views\Forum\EditPostPartial.cshtml" />
     <Content Include="Views\Forum\EditTopicPartial.cshtml" />
+    <Content Include="Views\Connection\PreviousConnections.cshtml" />
+    <Content Include="Views\Connection\ConnectionDetails.cshtml" />
+    <Content Include="Views\Connection\EditConnectionNamePartial.cshtml" />
+    <Content Include="Views\Connection\CreateReview.cshtml" />
+    <Content Include="Views\Connection\PendingConnection.cshtml" />
+    <Content Include="Views\Connection\EditReview.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\DesktopApplicationTutorialPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

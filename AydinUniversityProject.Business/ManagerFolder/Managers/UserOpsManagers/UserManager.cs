@@ -21,29 +21,10 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers
             userRepository.Add(user);
         }
 
-        public TransactionObject CheckCreedientals(string username, string password)
-        {
-            TransactionObject response = new TransactionObject();
-            User user = userRepository.SingleGetBy(w => w.Username == username);
-
-            if (user == null)
-            {
-                response.IsSuccess = false;
-                response.Explanation = "Username is invalid!";
-            }
-            else
-            {
-                if (SecurityFolder.Security.VerifyPassword(user.Password, password))
-                    response.IsSuccess = true;
-
-                else
-                {
-                    response.IsSuccess = false;
-                    response.Explanation = "Password is invalid!";
-                }
-            }
-            return response;
-        }
+        //public TransactionObject CheckCreedientals(string username, string password)
+        //{
+           
+        //}
 
         public User GetUser(int userID)
         {
@@ -74,5 +55,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.Managers.UserOpsManagers
         {
             return userRepository.GetAll().Select(s => s.Username).ToList();
         }
+
+       
     }
 }

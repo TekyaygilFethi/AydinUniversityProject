@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AydinUniversityProject.MVCA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AydinUniversityProject.DummyInsertionConsole", "AydinUniversityProject.DummyInsertionConsole\AydinUniversityProject.DummyInsertionConsole.csproj", "{61DBC6EC-1095-4F45-A643-FA724FDFA257}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AydinUniversityProject.DesktopClient", "AydinUniversityProject.DesktopClient\AydinUniversityProject.DesktopClient.csproj", "{EB7B47CB-AD60-40B7-AB59-AFBFC6694783}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61DBC6EC-1095-4F45-A643-FA724FDFA257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB7B47CB-AD60-40B7-AB59-AFBFC6694783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB7B47CB-AD60-40B7-AB59-AFBFC6694783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB7B47CB-AD60-40B7-AB59-AFBFC6694783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB7B47CB-AD60-40B7-AB59-AFBFC6694783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

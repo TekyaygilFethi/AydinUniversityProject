@@ -1,0 +1,100 @@
+﻿@model AydinUniversityProject.Data.Business.ScreenShareComplexManagerData.ConnectionDetailsFormData
+@{
+    ViewBag.Title = "ConnectionDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int currentUserID = (Session["Student"] as AydinUniversityProject.Data.POCOs.Student).User.ID;
+}
+@section Styles{
+    <link href="~/Content/ReviewStyle.css" rel="stylesheet" />
+}
+<div id="ConnectionNameArea"><h2>@Model.Connection.ConnectionName</h2></div>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Connection.ConnectionName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Connection.ConnectionName)
+        </dd>
+        <dt>
+            Sharer
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Connection.Sharer.Username)
+        </dd>
+        <dt>
+            Viewer
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Connection.Viewer.Username)
+        </dd>
+    </dl>
+</div>
+
+<div class="dialogArea"></div>
+@if (!Model.Connection.BaseRequests.Any())
+{
+    if (TempData["Unauthorized"] != null)
+    {
+        <p>
+            @Ajax.ActionLink("Connect Again As Sharer", "EstablishPreviousConnection", new { ID = Model.Connection.ID, status = "Sharer" }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to make this connection again as sharer? (Other user will be notified once the desktop application is opened!)", OnFailure = "alert('You already have an existing pending connection!');" }) |
+            @Ajax.ActionLink("Connect Again As Viewer", "EstablishPreviousConnection", new { ID = Model.Connection.ID, status = "Viewer" }, new AjaxOptions { HttpMethod = "POST", Confirm = "Are you sure you want to make this connection again as sharer? (Other user will be notified once the desktop application is opened!)", OnFailure = "alert('You already have an existing pending connection!');" }) |
+            @*@Ajax.ActionLink("Edit Connection Name", "EditConnectionNamePartial", new { ID = Model.Connection.ID }, new AjaxOptions { HttpMethod = "GET", InsertionMode = InsertionMode.Replace, UpdateTargetId = "ConnectionNameArea" })*@
+            @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+                @Html.ActionLink("Back to List", "Index")*@
+        </p>
+    }
+
+
+    <div class="container">
+        <div class="row">
+            <h2>Reviews</h2>
+            <hr style="border-color:red" />
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="item active">
+                        @foreach (var review in Model.Connection.Reviews)
+                        {
+                            <div class="col-md-4 col-sm-6 hidden-xs">
+                                <div class="block-text rel zmin">
+                                    <a title="" href="@Url.Action("UserProfile", "User", new { ID = review.Sender.ID })">@review.Sender.Username</a>
+                                    <div align="center">
+                                        @if (review.Vote == AydinUniversityProject.Data.POCOs.Vote.Upvote)
+                                        {
+                                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        }
+                                        @if (review.Vote == AydinUniversityProject.Data.POCOs.Vote.DownVote)
+                                        {
+                                            <span class="glyphicon glyphicon-thumbs-down"></span>
+                                        }
+                                    </div>
+                                    <p>@review.Message</p>
+                                    <ins class="ab zmin sprite sprite-i-triangle block"></ins>
+                                </div>
+                                <a href="@Url.Action("UserProfile","User",new { ID=review.SenderID})">
+                                    <div class="person-text rel">
+                                        <img class="img-circle" src="@Model.ProfilePhotoFormDatas.FirstOrDefault(w => w.ID == review.Sender.ID).Base64Image" width="20%" height="auto" />
+                                    </div>
+                                </a>
+                            </div>
+                            if (review.Sender.ID == currentUserID)
+                            {
+                                @Html.ActionLink("Edit Review", "EditReview", new { ID = review.ID });
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.Connection.BaseRequests.Any() && TempData["Unauthorized"] != null)
+{
+    <div>ALREADY SENT A REQUEST!</div>
+}

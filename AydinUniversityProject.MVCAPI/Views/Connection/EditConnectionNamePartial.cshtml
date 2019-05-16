@@ -1,0 +1,35 @@
+﻿
+<input type="hidden" value="@TempData["ConnectionID"]" id="idArea" />
+<input type="text" id="ConnectionName" placeholder="@TempData["ConnectionName"].ToString()" />
+<br />
+<br />
+<div class="btn btn-default" id="btnUpdate">Update</div>
+<div class="btn btn-danger" id="btnCancel">Cancel</div>
+@section Scripts{
+    <script>
+        $(function () {
+            $('#btnUpdate').click(function () {
+                var connectionName = $('#ConnectionName').val();
+                var ID = $('#idArea').val();
+
+                $.ajax({
+                    method: "POST",
+                    url: '../UpdateConnectionName',
+                    type: 'json',
+                    data: { ID: ID, name: connectionName },
+                    success: function () {
+                        window.location.reload();
+                    }, error: function () {
+                        window.location.reload();
+                    }
+
+                });
+            });
+
+            $('#btnCancel').click(function () {
+                window.location.reload();
+
+            });
+
+        });</script>
+}

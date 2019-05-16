@@ -4,10 +4,11 @@ using System.Web.Mvc;
 
 namespace AydinUniversityProject.MVCAPI.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private static AccountComplexManager accountManager = new AccountComplexManager();
+
 
         public ActionResult Index()
         {
@@ -27,10 +28,10 @@ namespace AydinUniversityProject.MVCAPI.Controllers
                 var response = accountManager.CreateAccount(newAccountInfo);
 
                 if (response.IsSuccess)
-                    return Json(new { IsSuccess=true});
+                    return Json(new { IsSuccess = true });
 
                 else
-                    return Json(new { IsSuccess = false,Error= response.Explanation });
+                    return Json(new { IsSuccess = false, Error = response.Explanation });
             }
             else
             {
@@ -66,6 +67,25 @@ namespace AydinUniversityProject.MVCAPI.Controllers
             Session.Abandon();
             Session.Clear();
             return Json(new { IsSuccess = true });
+        }
+
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+
+        public ActionResult DesktopApplicationTutorialPage()
+        {
+            return View();
         }
     }
 }
