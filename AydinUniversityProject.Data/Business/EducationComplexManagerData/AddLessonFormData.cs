@@ -5,11 +5,7 @@ namespace AydinUniversityProject.Data.Business.EducationComplexManagerData
     public class AddLessonFormData
     {
         public int LessonID { get; set; }
-
-        public int Year { get; set; }
-
-        public int Term { get; set; }
-
+        
         public int StudentID { get; set; }
 
         [MaxLength(100)]

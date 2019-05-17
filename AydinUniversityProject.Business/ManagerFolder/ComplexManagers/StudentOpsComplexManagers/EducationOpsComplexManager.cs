@@ -44,7 +44,7 @@ namespace AydinUniversityProject.Business.ManagerFolder.ComplexManagers.StudentO
 
                 if (education != null)
                 {
-                    Period currentPeriod = periodManager.GetPeriod(alFormData.Year, alFormData.Term);
+                    Period currentPeriod = periodManager.GetPeriod(selectedLesson.Period.Year, selectedLesson.Period.Semester);
 
 
                     Note note = new Note

@@ -5,6 +5,8 @@ using AydinUniversityProject.Data.Business.EducationComplexManagerData;
 using AydinUniversityProject.Data.POCOs;
 using AydinUniversityProject.MVCAPI.Filters;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Helpers;
 using System.Web.Mvc;
 
@@ -19,6 +21,13 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         public ActionResult AddNote()
         {
             TempData["StudentID"] = ((Student)Session["Student"]).ID;
+            List<Lesson> lessons = educationComplexManager.GetAllLessons();
+
+            ViewData["Lessons"] = lessons.Select(a => new SelectListItem
+            {
+                Text = a.Name,
+                Value = a.ID.ToString()
+            });
             return View();
         }
 
@@ -52,7 +61,7 @@ namespace AydinUniversityProject.MVCAPI.Controllers
         public ActionResult ListEducations()
         {
             TempData["StudentID"] = ((Student)Session["Student"]).ID;
-            return View();
+            return View(educationComplexManager.GetEducationsOfStudent(((Student)Session["Student"]).ID));
         }
 
         public ActionResult EducationDetails(int ID)

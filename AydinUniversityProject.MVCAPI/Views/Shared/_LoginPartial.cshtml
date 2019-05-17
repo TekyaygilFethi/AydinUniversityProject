@@ -91,7 +91,7 @@
             url: '@Url.Action("Logoff","Home")',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (res) { if(res.IsSuccess==true) window.location.reload(); },
+            success: function (res) { if(res.IsSuccess==true) window.location.href=@Url.Action("Index","Home"); },
             error: function (xhr, status, error) { alert(error); }
             });
         }

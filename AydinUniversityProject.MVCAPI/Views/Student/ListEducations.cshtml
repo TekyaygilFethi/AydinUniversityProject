@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<AydinUniversityProject.Data.POCOs.Education>
+@{
     ViewBag.Title = "List Educations";
 }
 <h2>ListEducations</h2>
@@ -6,13 +7,19 @@
     @Html.ActionLink("Add New Note", "AddNote", "Student")
 </p>
 <input type="hidden" id="StudentID" value="@TempData["StudentID"]" />
-<table class="table"></table>
+<table class="table">
+    <tr><th>Year</th><th>Term</th><th>Lesson</th><th>Average</th></tr>
+    @foreach (var edu in Model)
+    {
+        <tr><td>@edu.Lesson.Period.Year</td><td>@edu.Lesson.Period.Semester</td><td>@edu.Lesson.Name</td><td>@edu.Average</td><td id="@edu.ID"></td><td>@Html.ActionLink("Edit", "EditEducation", "Student", null, new { @onclick = "OnEditClick(this)" }) | @Html.ActionLink("Details", "EducationDetails", "Student", null, new { @onclick = "OnDetailClick(this)" }) |@Ajax.ActionLink("Delete", "", "api/Education/DeleteEducation", null, new AjaxOptions { HttpMethod = "GET", Confirm = "Are you sure you want to delete this University? All The Lesson and Note informations will be wiped out!", OnSuccess = "window.location.reload();", OnFailure = "alert(xhr.responseJSON);" }, new { @onclick = "OnDeleteClick(this)" })</td></tr>
+    }
+</table>
 @section Scripts{
     <script>
-        $(function () {
+        @*$(function () {
             $.ajax({
                 method: "GET",
-                url: '@Url.Action("GetEducationsOfStudent", "Education")',
+                url: '@Url.Action("GetEducationsOfStudent", "Student")',
                 dataType: 'json',
                 data: { ID: $('#StudentID').val()},
                 success: function (educations) {
@@ -26,7 +33,7 @@
                     alert(xhr.responseJSON);
                 },
             });
-        });
+        });*@
 
 
         function OnEditClick(elem) {

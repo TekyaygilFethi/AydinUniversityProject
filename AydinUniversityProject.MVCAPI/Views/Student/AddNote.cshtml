@@ -1,7 +1,6 @@
 ﻿
 @using (Ajax.BeginForm("AddLesson", "Student", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AddSuccess", OnFailure = "AddFailed(xhr,status,error)" }))
 {
-    @Html.AntiForgeryToken()
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="row">
@@ -29,131 +28,50 @@
                     <br />
                     COMPUTER PROGRAMMING
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <span class="label label-default">YEAR</span>
-                    <br />
-                    <br />
-                    <select id="Year" name="Year">
-                        <option value="1" selected>1</option>
-                        <option value="2">2</option>
-                    </select>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <span class="label label-default">Lesson</span>
+                        <br />
+                        <br />
+                        @Html.DropDownList("Lessons", ViewData["Lessons"] as SelectList, new { Class = "Lessons", onchange = "SelectedIndexChanged()" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <input type="hidden" id="StudentID" name="StudentID" value="@TempData["StudentID"]" />
+                    </div>
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="Description" id="Description" required />
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-6">
-                    <span class="label label-default">TERM</span>
-                    <br />
-                    <br />
-                    <select id="Term" name="Term">
-                        <option value="1" selected>1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
+                <label>RESULT POINT</label>
+                <input type="number" name="Result" id="Result" required />
             </div>
             <div class="form-group">
-                <div class="col-md-6">
-                    <span class="label label-default">Lesson</span>
-                    <br />
-                    <br />
-                    <select id="LessonID" name="LessonID" required></select>
-                </div>
+                <label>Effect (%)</label>
+                <input type="number" max="100" min="0" id="Effect" name="Effect" required />
             </div>
             <div class="form-group">
-                <div class="col-md-6">
-                    <input type="hidden" id="StudentID" name="StudentID" value="@TempData["StudentID"]" />
-                </div>
+                <input type="hidden" id="LessonID" name="LessonID" required />
             </div>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                <label>Description</label>
-                <input type="text" name="Description" id="Description" required />
-            </div>
-        </div>
-        <div class="form-group">
-            <label>RESULT POINT</label>
-            <input type="number" name="Result" id="Result" required />
-        </div>
-        <div class="form-group">
-            <label>Effect (%)</label>
-            <input type="number" max="100" min="0" id="Effect" name="Effect" required />
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
         </div>
     </div>
 }
+
 @Html.ActionLink("Back to List", "ListEducations", "Student")
 
 @section Scripts{
     <script type="text/javascript">
-
-        $(function () {
-
-            $.ajax({
-                    type: 'GET',
-                    url: '@Url.Action("GetLessons", "Student")',
-                    dataType: 'json',
-                    data: { Year: 1,Term:1 },
-                    success: function (lessons) {
-                        $.each(lessons, function (i, lesson) {
-                            $("#LessonID").append('<option value="' + lesson.ID + '">' +
-                                lesson.Name + '</option>');
-                        })
-                    }, error: function (ex) {
-                        alert('Failed to retrieve lessons! ' + ex)
-                    }
-                });
-
-
-            $('#Year').change(function () {
-                
-                $.ajax({
-                    type: 'GET',
-                    url: '@Url.Action("GetLessons", "Student")',
-                    dataType: 'json',
-                    data: { Year: $("#Year").val(),Term:$('#Term').val() },
-                    success: function (lessons) {
-                        $('#LessonID').empty();
-                        $.each(lessons, function (i, lesson) {
-                            $("#LessonID").append('<option value="' + lesson.ID + '">' +
-                                lesson.Name + '</option>');
-                        })
-                    }, error: function (ex) {
-                        alert('Failed to retrieve lessons! ' + ex)
-                    }
-                });
-                return false;
-            });
-
-            $('#Term').change(function () {
-                
-
-                $.ajax({
-                    type: 'GET',
-                    url: '@Url.Action("GetLessons", "Student")',
-                    dataType: 'json',
-                    data: { Year: $("#Year").val(), Term: $('#Term').val() },
-                    success: function (lessons) {
-                        $('#LessonID').empty();
-                        $.each(lessons, function (i, lesson) {
-                            $("#LessonID").append('<option value="' + lesson.ID + '">' +
-                                                     lesson.Name + '</option>');
-                        })
-                    }, error: function (ex) {
-                        alert('Failed to retrieve faculties! ' + ex)
-                    }
-                });
-                return false;
-            });
-        });
-
-
-
-        function AddSuccess()
+                                function AddSuccess()
         {
             alert("Lesson creation successful!");
 
@@ -161,6 +79,11 @@
         }
         function AccountCreationFailure(xhr, status, error) {
             alert(xhr.responseJSON.Message);
+        }
+
+        function SelectedIndexChanged() {
+            var selected = $('.Lessons').val();
+            $('#LessonID').val(selected);
         }
     </script>
 }
